@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>InsideCut · Your Sales Companion</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0d0f12;--card:#181c20;--border:#252a30;--muted:#3a4149;--text:#e8eaed;--sub:#7c8794;--green:#22d3a0;--gdim:#16a37a;--amber:#f59e0b;--red:#ef4444;--gg:rgba(34,211,160,.16);--ga:rgba(245,158,11,.13)}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;margin:0;padding:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+.fd{font-family:'Syne',sans-serif}.fm{font-family:'DM Mono',monospace}
+.glass{background:rgba(24,28,32,.75);backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:16px}
+.opt{width:100%;padding:13px 16px;background:rgba(37,42,48,.5);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;transition:all .18s;line-height:1.4}
+.opt:hover{border-color:var(--green);color:#fff;background:rgba(34,211,160,.06)}
+.opt.sel{border-color:var(--green);background:rgba(34,211,160,.09);color:var(--green)}
+.opt-sub{display:block;font-size:.74rem;color:var(--muted);margin-top:3px;font-style:italic}
+.opt.sel .opt-sub{color:rgba(34,211,160,.6)}
+.btn{background:linear-gradient(135deg,var(--gdim),var(--green));color:#000;font-weight:700;font-family:'Syne',sans-serif;padding:13px 28px;border:none;border-radius:10px;cursor:pointer;transition:all .18s;font-size:.9rem;letter-spacing:.02em}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px var(--gg)}
+.btn:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
+.ghost{background:transparent;color:var(--sub);border:1px solid var(--border);font-family:'DM Sans',sans-serif;padding:11px 22px;border-radius:10px;cursor:pointer;transition:all .18s;font-size:.88rem}
+.ghost:hover{border-color:var(--muted);color:var(--text)}
+.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:99px;border:1px solid var(--green);color:var(--green);font-size:.7rem;font-family:'DM Mono',monospace;letter-spacing:.07em;text-transform:uppercase}
+.pill{display:inline-block;padding:3px 9px;border-radius:99px;font-size:.7rem;font-family:'DM Mono',monospace}
+.pg{background:rgba(34,211,160,.11);color:var(--green);border:1px solid rgba(34,211,160,.22)}
+.pa{background:rgba(245,158,11,.11);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
+.pr{background:rgba(239,68,68,.11);color:#f87171;border:1px solid rgba(239,68,68,.22)}
+.pm{background:rgba(124,135,148,.09);color:var(--sub);border:1px solid var(--border)}
+.inp{width:100%;background:rgba(37,42,48,.6);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:13px 16px;font-size:.92rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .18s,box-shadow .18s}
+.inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,211,160,.1)}
+.inp::placeholder{color:var(--muted)}
+.warn{border-left:3px solid var(--amber);background:rgba(245,158,11,.06);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:var(--amber);line-height:1.5}
+.ok{border-left:3px solid var(--green);background:rgba(34,211,160,.06);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:var(--green);line-height:1.5}
+.bad{border-left:3px solid var(--red);background:rgba(239,68,68,.06);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#f87171;line-height:1.5}
+input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:99px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;background:var(--green);border-radius:50%;cursor:pointer;box-shadow:0 0 8px var(--gg)}
+.lnbtn{display:inline-flex;align-items:center;gap:7px;background:#0A66C2;color:#fff;font-family:'Syne',sans-serif;font-weight:700;padding:12px 22px;border-radius:10px;border:none;cursor:pointer;transition:all .18s;font-size:.88rem}
+.lnbtn:hover{background:#085faf;box-shadow:0 5px 20px rgba(10,102,194,.3)}
+.fbbtn{padding:9px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--sub);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s;font-size:.83rem}
+.fbbtn:hover,.fbbtn.on{border-color:var(--green);color:var(--green);background:rgba(34,211,160,.06)}
+.modcard{padding:13px 15px;background:rgba(37,42,48,.45);border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .18s;text-align:left}
+.modcard:hover{border-color:var(--green);background:rgba(34,211,160,.05)}
+.modcard.on{border-color:var(--green);background:rgba(34,211,160,.09)}
+.modcard.done{opacity:.45;cursor:not-allowed;border-style:dashed}
+.verdict{padding:14px 16px;border-radius:10px;margin-top:16px}
+.verdict-g{background:rgba(34,211,160,.07);border:1px solid rgba(34,211,160,.2)}
+.verdict-a{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2)}
+.verdict-r{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18)}
+@keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.fu{animation:fu .35s ease forwards}
+@keyframes pr2{0%,100%{opacity:.5}50%{opacity:1}}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pr2 2s infinite;display:inline-block;flex-shrink:0}
+#lock{position:fixed;inset:0;background:rgba(13,15,18,.97);backdrop-filter:blur(20px);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;padding:32px}
+</style>
+</head>
+<body>
+
+<div id="lock">
+  <div style="width:52px;height:52px;border-radius:50%;background:rgba(34,211,160,.09);border:1px solid rgba(34,211,160,.25);display:flex;align-items:center;justify-content:center">
+    <svg width="22" height="22" fill="none" stroke="#22d3a0" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+  </div>
+  <div><h2 class="fd" style="font-size:1.5rem;font-weight:800;color:#fff;margin:0 0 6px">Analysis Locked</h2>
+  <p style="color:var(--sub);font-size:.85rem;max-width:340px;margin:0">Share your result on LinkedIn to unlock instantly — or wait 24 hours.</p></div>
+  <button class="lnbtn" onclick="unlockShare();location.reload()">
+    <svg width="15" height="15" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+    Share to Unlock
+  </button>
+  <p id="lk-cd" style="color:var(--muted);font-size:.8rem;font-family:'DM Mono',monospace"></p>
+</div>
+
+<header style="border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;background:rgba(13,15,18,.9);backdrop-filter:blur(18px)">
+  <div style="max-width:660px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div style="width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#16a37a,#22d3a0);display:flex;align-items:center;justify-content:center">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#000" stroke-width="2.8"><path d="M12 2 L2 19 L12 14 L22 19 Z"/></svg>
+      </div>
+      <span class="fd" style="font-weight:800;color:#fff;font-size:.95rem">InsideCut<span style="color:var(--green)">.</span></span>
+    </div>
+    <div id="hphase" style="display:none" class="chip"><span class="dot"></span><span id="hpt">Qualifying</span></div>
+  </div>
+</header>
+
+<div id="app" style="max-width:660px;margin:0 auto;padding:20px">
+
+  <!-- HERO -->
+  <div id="s-hero" class="fu">
+    <div style="text-align:center;padding:44px 0 28px">
+      <div class="chip" style="margin-bottom:16px;border-color:rgba(34,211,160,.3)"><span class="dot"></span>Deal Diagnostic Platform · Free</div>
+      <h1 class="fd" style="font-size:2.5rem;font-weight:800;letter-spacing:-.03em;line-height:1.1;color:#fff;margin:0 0 10px">
+        InsideCut<span style="color:var(--green)">.</span><br>
+        <span style="color:var(--sub);font-weight:500;font-size:.46em;letter-spacing:-.01em">Your Sales Companion</span>
+      </h1>
+      <p style="color:var(--sub);font-size:.92rem;margin:10px 0 0;line-height:1.7">Reveal hidden risks, qualification gaps, and deal threats<br><span style="color:var(--muted);font-size:.88em">before they become losses.</span></p>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin-bottom:28px">
+      <span class="pill pg">Pain Reality</span>
+      <span class="pill pm">Buyer Behavior</span>
+      <span class="pill pa">Stakeholder Risk</span>
+      <span class="pill pm">Budget Reality</span>
+      <span class="pill pg">Champion Strength</span>
+      <span class="pill pm">Forecast Confidence</span>
+    </div>
+
+    <!-- Live counter bar -->
+    <div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:28px;padding:14px 20px;background:rgba(37,42,48,.4);border-radius:12px;border:1px solid var(--border);max-width:440px;margin-left:auto;margin-right:auto">
+      <div style="text-align:center">
+        <div class="fd" style="font-size:1.5rem;font-weight:800;color:var(--green)" id="stat-total">—</div>
+        <div style="font-size:.7rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Deals Assessed</div>
+      </div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div style="text-align:center">
+        <div class="fd" style="font-size:1.5rem;font-weight:800;color:var(--amber)" id="stat-today">—</div>
+        <div style="font-size:.7rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Today</div>
+      </div>
+      <div style="width:1px;background:var(--border)"></div>
+      <div style="text-align:center">
+        <div class="fd" style="font-size:1.5rem;font-weight:800;color:var(--green)" id="stat-shares">—</div>
+        <div style="font-size:.7rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">LinkedIn Shares</div>
+      </div>
+    </div>
+
+    <div class="glass" style="padding:28px;max-width:440px;margin:0 auto">
+      <h3 class="fd" style="color:#fff;font-size:1rem;font-weight:700;margin:0 0 4px">Start Your Diagnostic</h3>
+      <p style="color:var(--sub);font-size:.82rem;margin:0 0 18px">Enter your work email to begin. Takes 4–6 minutes.</p>
+      <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase">Work Email</label>
+      <input type="email" id="em" class="inp" placeholder="you@company.com" style="margin-bottom:10px"/>
+      <div style="display:flex;align-items:flex-start;gap:7px;padding:9px 11px;background:rgba(124,135,148,.05);border-radius:8px;border:1px solid var(--border);margin-bottom:16px">
+        <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0;margin-top:2px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p style="font-size:.74rem;color:var(--muted);line-height:1.5;margin:0">No customer names, company names, or deal values collected.</p>
+      </div>
+      <button class="btn" style="width:100%" onclick="beginFlow()">Begin Diagnostic →</button>
+    </div>
+  </div>
+
+  <!-- QUESTION FLOW -->
+  <div id="s-q" style="display:none"><div id="qwrap"></div></div>
+
+  <!-- RESULTS -->
+  <div id="s-res" style="display:none"><div id="rwrap"></div></div>
+
+</div>
+
+<script>
+const SHEETS_URL='https://script.google.com/macros/s/AKfycbxTDdunFZG5dipKpMRzUWN_MPPTkCqmDKoojyFsjfUBq8OkgdJsAvIIfyvGYENJy4H5/exec';
+const LOCK_MS=24*60*60*1000;
+
+let S={email:'',role:'ae',ans:{},conf:7};
+let phase='context';
+let modChosen=null;
+let completedMods=[];
+
+// Load stats on page load
+window.addEventListener('DOMContentLoaded',loadStats);
+
+// ── Lock ──
+function locked(){const t=localStorage.getItem('ic_locked');if(!t)return false;if(localStorage.getItem('ic_shared')==='1')return false;return Date.now()-+t<LOCK_MS;}
+function lockIt(){localStorage.setItem('ic_locked',Date.now());localStorage.removeItem('ic_shared');}
+function unlockShare(){localStorage.setItem('ic_shared','1');bumpLocalStats(true);}
+function countdown(){const t=+localStorage.getItem('ic_locked')||0;const r=LOCK_MS-(Date.now()-t);if(r<=0)return'Unlocked — refresh to start.';const h=Math.floor(r/3600000),m=Math.floor((r%3600000)/60000);return`Unlocks in ${h}h ${m}m`;}
+function showLock(){document.getElementById('lock').style.display='flex';document.getElementById('lk-cd').textContent=countdown();}
+
+// ── Usage counter (fetched from Sheets via GET, falls back to localStorage) ──
+function loadStats(){
+  // localStorage fallback — always increment on results
+  const local={total:+localStorage.getItem('ic_stat_total')||0,today:+localStorage.getItem('ic_stat_today')||0,shares:+localStorage.getItem('ic_stat_shares')||0};
+  setStats(local.total||'—',local.today||'—',local.shares||'—');
+
+  // Try to fetch live stats from Sheets (GET endpoint returns JSON)
+  if(!SHEETS_URL||SHEETS_URL.includes('YOUR_'))return;
+  fetch(SHEETS_URL+'?action=stats')
+    .then(r=>r.json())
+    .then(d=>{
+      if(d&&d.total!=null){setStats(d.total,d.today,d.shares);}
+    }).catch(()=>{});
+}
+
+function setStats(total,today,shares){
+  const fmt=n=>typeof n==='number'?n.toLocaleString():n;
+  document.getElementById('stat-total').textContent=fmt(total);
+  document.getElementById('stat-today').textContent=fmt(today);
+  document.getElementById('stat-shares').textContent=fmt(shares);
+}
+
+function bumpLocalStats(isShare=false){
+  const today=new Date().toDateString();
+  const savedDay=localStorage.getItem('ic_stat_day');
+  let t=+localStorage.getItem('ic_stat_total')||0;
+  let d=savedDay===today?(+localStorage.getItem('ic_stat_today')||0):0;
+  let s=+localStorage.getItem('ic_stat_shares')||0;
+  t++;d++;
+  if(isShare)s++;
+  localStorage.setItem('ic_stat_total',t);
+  localStorage.setItem('ic_stat_today',d);
+  localStorage.setItem('ic_stat_day',today);
+  localStorage.setItem('ic_stat_shares',s);
+}
+
+// ══════════════════════════════════════════════════════
+// QUESTION BANKS
+// ══════════════════════════════════════════════════════
+
+// Context — sets the scene, not scored, captured to DB
+const CTX_QS=[
+  {id:'role', q:'What is your role in this deal?', sub:'Your output will be tailored to your position and responsibility.',
+   opts:[
+     {l:'BDR / SDR',                    sub:'Prospecting and early discovery',      v:'bdr'},
+     {l:'Account Executive',            sub:'Owning and advancing the deal',        v:'ae'},
+     {l:'Senior AE / Strategic Seller', sub:'Complex, multi-stakeholder deals',     v:'senior'},
+     {l:'Sales Leader / Manager',       sub:'Pipeline inspection and forecast',     v:'leader'},
+   ]},
+  {id:'stage', q:'Where are you in this opportunity?', sub:'',
+   opts:[
+     {l:'Early Discovery',           sub:'First few conversations, qualifying intent',       v:'early'},
+     {l:'Active Evaluation',         sub:'In a competitive process, demos / proposals',      v:'mid'},
+     {l:'Late Stage / Commit',       sub:'Commercial discussions, final validation',         v:'late'},
+     {l:'Requalifying a Stuck Deal', sub:'Deal stalled — reassessing before investing more', v:'restuck'},
+   ]},
+  {id:'cust_type', q:'What type of customer is this?', sub:'Context only — helps frame your output. Not scored.',
+   opts:[
+     {l:'SMB',        v:'smb'},
+     {l:'Mid-Market', v:'mm'},
+     {l:'Enterprise', v:'ent'},
+     {l:'Government', v:'gov'},
+     {l:'Startup',    v:'startup'},
+   ]},
+  {id:'industry', q:'What industry do they operate in?', sub:'',
+   opts:[
+     {l:'Manufacturing',       v:'mfg'},
+     {l:'SaaS / Technology',   v:'saas'},
+     {l:'Financial Services',  v:'fin'},
+     {l:'Healthcare',          v:'hc'},
+     {l:'Logistics',           v:'log'},
+     {l:'Retail',              v:'ret'},
+     {l:'Construction',        v:'const'},
+     {l:'Energy',              v:'enrg'},
+     {l:'Other',               v:'other'},
+   ]},
+  {id:'product_cat', q:'What are you selling?', sub:'',
+   opts:[
+     {l:'ERP',              v:'erp'},
+     {l:'CRM',              v:'crm'},
+     {l:'Cybersecurity',    v:'cyber'},
+     {l:'AI / Analytics',   v:'ai'},
+     {l:'Cloud / Infra',    v:'cloud'},
+     {l:'Managed Services', v:'msp'},
+     {l:'Consulting',       v:'consulting'},
+     {l:'HR / Payroll',     v:'hr'},
+     {l:'Vertical SaaS',    v:'vsaas'},
+     {l:'Other',            v:'other'},
+   ]},
+];
+
+// ── BDR QUICK (3 Qs) — is this even real? ──
+const BDR_QUICK=[
+  {id:'pain_origin', q:'How did the prospect describe their current situation?', sub:'What they say first reveals whether they have a real problem — or just curiosity.',
+   opts:[
+     {l:'Specific operational pain — something is broken or failing',         sub:'Strong signal: real problem owner', v:'specific', s:22},
+     {l:'Vague interest — "exploring options" or "just looking"',            sub:'Weak signal: no burning platform yet', v:'vague', s:3},
+     {l:'Compliance or forced migration — vendor pressure, end of life',     sub:'Strong signal: external forcing function', v:'forced', s:20},
+     {l:'Exec-mandated — leadership told them to evaluate',                   sub:'Strong signal: top-down initiative', v:'exec', s:18},
+   ]},
+  {id:'initiative_direction', q:'Who initiated the conversation about change — management or the team?', sub:'"Dad asking kids to look" vs "kids convincing dad" changes everything about urgency and authority.',
+   opts:[
+     {l:'Top-down — leadership or exec mandated the search',   sub:'Budget and authority likely exist', v:'topdown', s:20},
+     {l:'Bottom-up — team is building a business case upward', sub:'Approval and budget not confirmed', v:'bottomup', s:8},
+     {l:'Mixed — both sides are aligned and pushing',          sub:'Strongest signal of real momentum', v:'mixed', s:18},
+     {l:'Unknown — not yet explored',                          sub:'Critical gap — need to find out', v:'unknown', s:-8},
+   ]},
+  {id:'bdr_hot_trigger', q:'Is there a specific trigger making this urgent right now?', sub:'Hot triggers predict close probability more than any other single factor.',
+   opts:[
+     {l:'Current vendor forcing migration or end-of-life notice',  sub:'Fire in the seat — real urgency', v:'vendor', s:22},
+     {l:'Recent capital raise, acquisition, or new plant expansion',sub:'Growth trigger — budget likely available', v:'growth', s:20},
+     {l:'New CIO / CFO / GM hire in the last 6 months',            sub:'New exec = new mandate', v:'newhire', s:18},
+     {l:'Public RFP or formal tender issued',                       sub:'Process exists — evaluate carefully', v:'rfp', s:14},
+     {l:'Internal influencer who has worked with our solution',     sub:'Champion seed already planted', v:'influencer', s:16},
+     {l:'No specific trigger — general interest',                   sub:'Low urgency — exploration mode', v:'none', s:-5},
+   ]},
+];
+
+// ── AE / SENIOR / LEADER QUICK (3 Qs) ──
+const AE_QUICK=[
+  {id:'origin', q:'How did this opportunity originate?', sub:'Deal origin is the single strongest predictor of close probability.',
+   opts:[
+     {l:'Executive mandate — leadership initiated the search',  sub:'Top-down authority and budget', v:'exec', s:22},
+     {l:'Operational pain — team identified a breaking point',  sub:'Real problem, real owner', v:'pain', s:16},
+     {l:'Compliance or forced migration',                       sub:'External urgency driving action', v:'compliance', s:18},
+     {l:'Replacing an existing tool',                           sub:'Vendor dissatisfaction or gap', v:'replace', s:10},
+     {l:'Inbound inquiry — general interest',                   sub:'Lowest signal — validate intent', v:'inbound', s:3},
+   ]},
+  {id:'access', q:'Who are you consistently speaking with — and what are they actually doing?', sub:'Behavior reveals more than title. A champion who introduces you to others is acting. One who just takes calls is stalling.',
+   opts:[
+     {l:'Executive sponsor — actively visible, making introductions',   sub:'Strongest access signal', v:'exec', s:22},
+     {l:'Multiple stakeholders — across functions, all engaged',        sub:'Multi-threaded = deal momentum', v:'multi', s:20},
+     {l:'Department manager — responsive, but no upward access yet',   sub:'Moderate — champion potential', v:'manager', s:12},
+     {l:'Power user — engaged but asking for more demos and documents', sub:'May be stalling — watch behavior', v:'power', s:6},
+     {l:'Junior researcher — taking calls, sharing content upward',     sub:'No authority — high stall risk', v:'junior', s:2},
+   ]},
+  {id:'urgency', q:'What is the real driver behind their timeline — and have you tested it?', sub:'"We need it yesterday" often means urgency without readiness. A hard deadline backed by a business case is different.',
+   opts:[
+     {l:'Hard deadline — compliance, go-live date, or contract expiry',  sub:'Verified urgency', v:'deadline', s:22},
+     {l:'Budget cycle — must commit before fiscal close',                sub:'Financial urgency', v:'budget', s:18},
+     {l:'Competitive pressure — losing ground to rivals',               sub:'Emotional urgency', v:'competitive', s:12},
+     {l:'Stated urgency — "ASAP" — but no business case or approval yet',sub:'Classic stall signal — probe deeper', v:'false', s:2},
+     {l:'Exploring options — no real timeline',                         sub:'No urgency detected', v:'exploring', s:-5},
+   ]},
+];
+
+// ── AE DEEP (3 Qs) ──
+const AE_DEEP=[
+  {id:'cost_na', q:'What happens to this organisation if they make no decision for 12 months?', sub:'Low consequence of inaction is the silent deal killer. Probe whether they genuinely feel the cost.',
+   opts:[
+     {l:'Significant financial impact — measurable and quantified',   sub:'Strongest close signal', v:'financial', s:20},
+     {l:'Executive escalation — a board or leadership commitment',    sub:'Political urgency is real', v:'exec', s:18},
+     {l:'Operational bottleneck — teams are visibly struggling',     sub:'Operational pain is real', v:'operational', s:14},
+     {l:'Team frustration — people want change but not urgent',      sub:'Moderate — needs amplification', v:'team', s:7},
+     {l:'Minimal — they could stay as they are without real pain',   sub:'High stall risk — no burning platform', v:'minimal', s:-12},
+   ]},
+  {id:'buyer_maturity', q:'Does this buying team understand how a complex solution like this is actually bought and implemented?', sub:'First-time buyers often underestimate scope, timeline, and internal change required. This is a risk factor, not a disqualifier.',
+   opts:[
+     {l:'Expert buyer — has done this before, knows the process',      sub:'Fast decisions, fewer surprises', v:'expert', s:12},
+     {l:'Experienced team — some past exposure, asking the right questions', sub:'Good baseline', v:'exp', s:9},
+     {l:'First-time buyer — no prior experience with this type of purchase',sub:'Needs education — implementation risk', v:'first', s:3},
+     {l:'Failed before — attempted a similar initiative that collapsed', sub:'Scepticism and fear may stall progress', v:'failed', s:-8},
+   ]},
+  {id:'post_demo', q:'After your last meaningful interaction, what did the prospect actually do?', sub:'Buyer behavior between conversations is the most honest signal you have.',
+   opts:[
+     {l:'Introduced us to another stakeholder or exec internally',   sub:'Champion behavior — they\'re selling for you', v:'intro', s:20},
+     {l:'Sent us internal documents, data, or process information',  sub:'Investing their time = buying signal', v:'docs', s:16},
+     {l:'Asked for another demo or more materials',                  sub:'Possible stall — explore intent', v:'demo', s:4},
+     {l:'Went quiet — had to chase for a response',                 sub:'Disengagement signal — flag immediately', v:'quiet', s:-10},
+     {l:'Brought procurement or legal into the conversation',        sub:'Late signal — positive but adds complexity', v:'proc', s:8},
+   ]},
+];
+
+// ══════════════════════════════════════════════════════
+// DIAGNOSTIC MODULES (variable length, 2–4 Qs each)
+// ══════════════════════════════════════════════════════
+const MODULES={
+  icp:{
+    label:'ICP & Readiness', icon:'◈',
+    desc:'Can they actually implement and adopt this — or will it collapse post-sale?',
+    qs:[
+      {id:'icp_change_mgt', q:'Is there evidence this organisation has successfully navigated a major technology or operational change before?', sub:'Change management failure is the #1 reason implementations collapse — not the software.',
+       opts:[
+         {l:'Yes — recent successful transformation, team is confident',       sub:'Low implementation risk', v:'yes', s:18},
+         {l:'Partial — some change initiatives, but inconsistent execution',    sub:'Moderate risk — probe depth', v:'partial', s:8},
+         {l:'No — traditional, resistant culture, limited change history',     sub:'High post-sale risk', v:'no', s:-10},
+         {l:'Unknown — not explored yet',                                       sub:'Critical blind spot', v:'unknown', s:-5},
+       ]},
+      {id:'icp_ownership', q:'Is there a named internal owner who is personally accountable for this initiative succeeding?', sub:'"Dad asking kids to search" without Dad owning the outcome means no accountability — and no urgency.',
+       opts:[
+         {l:'Yes — senior, named, engaged, with a mandate',   sub:'Ownership confirmed', v:'yes', s:18},
+         {l:'Informally — someone is leading but no clear mandate', sub:'Fragile — could dissolve', v:'informal', s:6},
+         {l:'No — committee with no single owner',            sub:'High risk of indefinite delay', v:'no', s:-12},
+       ]},
+      {id:'icp_data_readiness', q:'Are data, processes, and people in a state where implementation could realistically begin?', sub:'Urgency without readiness is a trap — it creates rushed projects and unhappy customers.',
+       opts:[
+         {l:'Yes — project team identified, data is structured, processes are documented', sub:'High readiness', v:'yes', s:14},
+         {l:'Partially — gaps exist but they\'re aware and planning for them',             sub:'Manageable with good scoping', v:'partial', s:7},
+         {l:'Not ready — chaotic data, undefined processes, no project resource',         sub:'Implementation risk is high', v:'no', s:-10},
+       ]},
+    ]},
+
+  champion:{
+    label:'Champion Strength', icon:'◉',
+    desc:'Is your internal advocate actually fighting for you — or just being polite?',
+    qs:[
+      {id:'champ_action', q:'What is your champion actually doing — not saying — between your conversations?', sub:'A real champion sells for you when you\'re not in the room. Talk is not evidence.',
+       opts:[
+         {l:'Proactively scheduling meetings and introducing new stakeholders',  sub:'Champion is actively selling internally', v:'active', s:22},
+         {l:'Sharing our materials internally and following up on their own',    sub:'Engaged — building internal case', v:'sharing', s:16},
+         {l:'Responding well to my outreach but not taking independent action',  sub:'Responsive but passive — not a true champion', v:'passive', s:6},
+         {l:'Difficult to reach — I\'m chasing them',                           sub:'Champion has disengaged or lost interest', v:'gone', s:-14},
+       ]},
+      {id:'champ_power', q:'Does your champion have genuine internal influence — or are they a messenger?', sub:'',
+       opts:[
+         {l:'Yes — respected decision-maker, can move budgets and people',sub:'Power champion', v:'yes', s:20},
+         {l:'Influence is unclear — I\'m not sure how they\'re perceived', sub:'Validate urgently', v:'unclear', s:4},
+         {l:'Junior — well-meaning but cannot drive a decision',           sub:'Coach them or find another path', v:'junior', s:-8},
+         {l:'Champion is gone — left role, went silent, or was replaced',  sub:'Deal is at critical risk', v:'lost', s:-20},
+       ]},
+      {id:'champ_motivation', q:'What is driving your champion personally — not just professionally?', sub:'Champions without a personal win rarely fight internal battles.',
+       opts:[
+         {l:'Career advancement — this project will make them look good',sub:'Strong personal motivation', v:'career', s:16},
+         {l:'Solving a pain they personally feel every day',             sub:'Emotionally invested', v:'pain', s:16},
+         {l:'Directed from above — they\'re executing an order',        sub:'Compliant but may not fight for it', v:'directed', s:6},
+         {l:'Unknown — I haven\'t explored their personal motivation',  sub:'Significant blind spot', v:'unknown', s:-8},
+       ]},
+    ]},
+
+  budget:{
+    label:'Budget Reality', icon:'◆',
+    desc:'Is there real money committed — or are they shopping without a wallet?',
+    qs:[
+      {id:'budget_status', q:'Where does the budget actually stand — not what they\'ve told you, but what the evidence suggests?', sub:'"Budget is not a constraint" and "We\'ll decide after the demo" are classic signals of no business case yet.',
+       opts:[
+         {l:'Formally approved — allocated and confirmed by finance',         sub:'Budget confirmed', v:'approved', s:22},
+         {l:'In budget cycle — request submitted, decision expected this quarter',sub:'On track', v:'cycle', s:14},
+         {l:'Business case in progress — mid-management is building it upward', sub:'Bottom-up, approval pending', v:'bottomup', s:7},
+         {l:'No discussion yet — they avoid the topic or deflect',            sub:'High risk — explore urgently', v:'none', s:-12},
+       ]},
+      {id:'budget_owner', q:'Have you spoken directly — or even indirectly — with the person who controls the budget?', sub:'',
+       opts:[
+         {l:'Yes — I have a direct relationship with the economic buyer',  sub:'Budget path clear', v:'yes', s:18},
+         {l:'Indirectly — my champion says the budget owner is aligned',   sub:'Unverified — validate', v:'indirect', s:8},
+         {l:'No — I don\'t know who owns the budget',                     sub:'Critical gap', v:'no', s:-14},
+       ]},
+    ]},
+
+  exec:{
+    label:'Executive Sponsorship', icon:'◎',
+    desc:'Is there a senior leader who has personally committed — or is this a team hobby?',
+    qs:[
+      {id:'exec_presence', q:'Is there a named executive sponsor who has personally expressed commitment to this initiative?', sub:'Executive sponsorship is the single strongest predictor of close. Passive sponsorship is not sponsorship.',
+       opts:[
+         {l:'Yes — named, engaged, and visibly participating in meetings', sub:'Confirmed sponsorship', v:'yes', s:24},
+         {l:'Named but passive — their name is mentioned but not present', sub:'Paper sponsor — high risk', v:'passive', s:8},
+         {l:'Not yet identified',                                          sub:'Significant gap', v:'none', s:-14},
+         {l:'Sponsor left, changed role, or went quiet',                  sub:'Deal in serious jeopardy', v:'left', s:-20},
+       ]},
+      {id:'exec_personal_urgency', q:'Has the executive communicated any personal urgency or timeline for this initiative?', sub:'An exec who says "we need this by Q3" is a different conversation from one who says "let the team handle it".',
+       opts:[
+         {l:'Yes — direct and specific commitment to a timeline',    sub:'Real executive urgency', v:'yes', s:20},
+         {l:'Implied — through others, not directly stated',         sub:'Soft signal — validate', v:'implied', s:9},
+         {l:'No urgency detected at exec level',                     sub:'Risk of indefinite delay', v:'no', s:-10},
+       ]},
+    ]},
+
+  competitive:{
+    label:'Competitive Position', icon:'⊕',
+    desc:'Do you actually know where you stand — or are you assuming you\'re winning?',
+    qs:[
+      {id:'comp_landscape', q:'What is the realistic competitive situation in this deal?', sub:'Big names mentioned (Oracle, SAP) don\'t mean those are the real competitors — dig for specific products, not OEMs.',
+       opts:[
+         {l:'No known competitors — we\'re the only one being evaluated', sub:'Evaluate why — is the process real?', v:'sole', s:10},
+         {l:'One named competitor — specific product, not just a brand',  sub:'Competitive — but manageable', v:'one', s:10},
+         {l:'Multiple competitors — active evaluation underway',          sub:'Structured evaluation — needs differentiation', v:'multi', s:4},
+         {l:'Internal build competing for the same budget',               sub:'Hardest competitor — reframe the conversation', v:'build', s:-10},
+         {l:'Extending the existing vendor — inertia is the enemy',       sub:'Incumbent advantage — strong barrier', v:'extend', s:-8},
+       ]},
+      {id:'comp_position', q:'Where do you honestly believe you stand in this evaluation?', sub:'',
+       opts:[
+         {l:'Preferred — they\'ve told us we\'re the frontrunner',          sub:'Protect and close', v:'lead', s:18},
+         {l:'Even — genuine evaluation, no clear preference yet',           sub:'Win on differentiation', v:'even', s:8},
+         {l:'Behind — recovering from a weak start or product gap',        sub:'Intervention needed', v:'behind', s:-6},
+         {l:'Unknown — we haven\'t tested our position',                   sub:'Dangerous blind spot', v:'unknown', s:-12},
+       ]},
+      {id:'existing_vendor', q:'How would you characterise the strength of their relationship with their current vendor?', sub:'Incumbent advantage is consistently underestimated. Dissatisfaction must be deep and specific to displace.',
+       opts:[
+         {l:'Deeply frustrated — specific failures, active pain',      sub:'Displacement opportunity is real', v:'frustrated', s:18},
+         {l:'Mildly dissatisfied — open to change but not desperate',  sub:'Moderate displacement probability', v:'mild', s:9},
+         {l:'Satisfied — evaluating us as a future option only',       sub:'Low urgency — why now?', v:'satisfied', s:-8},
+         {l:'No incumbent — greenfield or first ERP',                 sub:'No displacement needed', v:'none', s:10},
+       ]},
+    ]},
+
+  procurement:{
+    label:'Procurement & Change Risk', icon:'◧',
+    desc:'Will process friction or organisational resistance kill this deal after you\'ve won it?',
+    qs:[
+      {id:'proc_status', q:'Is procurement or a formal evaluation process involved — and if so, where does it stand?', sub:'Late procurement surprise is one of the top five deal killers at commit stage.',
+       opts:[
+         {l:'Yes — aligned and moving, we\'re in the process',      sub:'Expected friction — manageable', v:'aligned', s:12},
+         {l:'Yes — but showing signs of friction or delay',          sub:'Address urgently', v:'friction', s:-6},
+         {l:'Not yet — but likely to be involved',                  sub:'Prepare now', v:'coming', s:4},
+         {l:'No formal procurement — decision is informal',         sub:'Less friction but less structure', v:'none', s:8},
+       ]},
+      {id:'change_appetite', q:'How willing is this organisation to actually change how they work — not just buy new software?', sub:'Organisations that underestimate change management are the highest implementation failure risk.',
+       opts:[
+         {l:'High — change-ready culture, leadership actively preparing teams', sub:'Low adoption risk', v:'high', s:16},
+         {l:'Moderate — cautious but open, willing to invest in training',      sub:'Manageable', v:'moderate', s:9},
+         {l:'Low — resistant culture, previous change initiatives failed',      sub:'High post-sale risk', v:'low', s:-12},
+         {l:'Unknown — hasn\'t been explored',                                  sub:'Blind spot', v:'unknown', s:-5},
+       ]},
+    ]},
+
+  forecast:{
+    label:'Forecast Confidence', icon:'◐',
+    desc:'Should this deal be in your forecast — or is it flattering your pipeline?',
+    qs:[
+      {id:'slip_surprise', q:'If this deal slipped 6 months, would you be surprised?', sub:'Your gut answer to this question is more accurate than your CRM stage.',
+       opts:[
+         {l:'Very surprised — I have strong conviction this closes on time',  sub:'High forecast confidence', v:'very', s:22},
+         {l:'Somewhat surprised — there are a few variables I can\'t control',sub:'Moderate confidence', v:'somewhat', s:12},
+         {l:'Not surprised — I\'m already seeing delay signals',              sub:'Do not commit to forecast', v:'not', s:-12},
+         {l:'Expecting a delay — I just haven\'t updated the CRM yet',        sub:'Deal needs urgent intervention or removal', v:'expecting', s:-20},
+       ]},
+      {id:'next_step', q:'Do you have a mutually agreed next step — confirmed in writing by both sides?', sub:'Deals without mutually agreed next steps stall at a 3× higher rate. "I\'ll call them next week" is not a next step.',
+       opts:[
+         {l:'Yes — confirmed date, agenda, and both sides have committed',sub:'Healthy deal momentum', v:'yes', s:18},
+         {l:'Loosely agreed — verbal but not confirmed in writing',       sub:'Fragile — confirm today', v:'loose', s:8},
+         {l:'One-sided — I\'ve proposed it but no response yet',         sub:'Chasing signal', v:'onesided', s:-8},
+         {l:'No next step — I\'m not sure what happens next',            sub:'Deal has stalled', v:'none', s:-18},
+       ]},
+      {id:'proj_team', q:'Has a project team or internal steering committee been formally identified on their side?', sub:'A named project team is evidence that a decision has been approved internally — even before the contract is signed.',
+       opts:[
+         {l:'Yes — named team, project owner, go-live target defined',  sub:'Commitment signal', v:'yes', s:16},
+         {l:'Informally identified — names mentioned but not official', sub:'Progress, but fragile', v:'informal', s:7},
+         {l:'No — it\'s still a one-person evaluation',                 sub:'No internal commitment yet', v:'no', s:-10},
+       ]},
+    ]},
+};
+
+// ══════════════════════════════════════════════════════
+// SCORING
+// ══════════════════════════════════════════════════════
+function scoreList(qList,ans){
+  let t=0,max=0;
+  qList.forEach(q=>{
+    const pos=q.opts.filter(o=>o.s>0);
+    if(pos.length)max+=Math.max(...pos.map(o=>o.s));
+    const a=q.opts.find(o=>o.v===ans[q.id]);
+    if(a&&a.s)t+=a.s;
+  });
+  return max>0?Math.round(Math.max(0,Math.min(100,(t/max)*100))):50;
+}
+
+function totalScore(){
+  const role=S.role;
+  const activeModules=role==='bdr'?BDR_MODULES:MODULES;
+  let all=role==='bdr'?[...BDR_QUICK]:[...AE_QUICK,...AE_DEEP];
+  completedMods.forEach(k=>{if(activeModules[k])all=[...all,...activeModules[k].qs];});
+  const base=scoreList(all,S.ans);
+  const c=S.conf;
+  if(c<=3)return Math.round(base*.75);
+  if(c<=5)return Math.round(base*.88);
+  if(c>=8)return Math.min(100,Math.round(base*1.05));
+  return base;
+}
+
+function status(sc){
+  if(sc>=80)return{l:'Deeply Qualified',c:'green',glow:true};
+  if(sc>=62)return{l:'Strong Core',c:'green'};
+  if(sc>=46)return{l:'Developing',c:'amber'};
+  if(sc>=28)return{l:'Fragile',c:'amber'};
+  return{l:'Surface-Level',c:'red'};
+}
+
+function forecast(sc,conf){
+  if(sc>=70&&conf>=7)return{l:'High Confidence',c:'green'};
+  if(sc>=45||conf>=5)return{l:'Moderate Confidence',c:'amber'};
+  return{l:'Low Confidence',c:'red'};
+}
+
+// ── Module mini-verdict ──
+function moduleVerdict(k,activeModules){
+  const modSet=activeModules||MODULES;
+  const qs=modSet[k]?.qs;if(!qs)return{cls:'verdict-a',icon:'~',text:k,detail:''};
+  const sc=scoreList(qs,S.ans);
+  const label=modSet[k].label;
+  if(sc>=65)return{cls:'verdict-g',icon:'✓',text:`${label}: Low Risk`,detail:bdrVerdictDetail(k,sc,'low')};
+  if(sc>=38)return{cls:'verdict-a',icon:'⚠',text:`${label}: Moderate Risk`,detail:bdrVerdictDetail(k,sc,'mod')};
+  return{cls:'verdict-r',icon:'✕',text:`${label}: HIGH RISK`,detail:bdrVerdictDetail(k,sc,'high')};
+}
+
+function bdrVerdictDetail(k,sc,level){
+  const a=S.ans;
+  const bdrDetails={
+    pain_reality:{low:'Pain is real, specific, and felt by the right person. Advance.',mod:'Pain exists but is vague or owned by the wrong person. Dig deeper before advancing.',high:'No clear pain or pain owner. This is a browsing exercise — do not advance without requalification.'},
+    access_path:{low:'Decision-maker identified and access path is clear. Push for the meeting.',mod:'Decision-maker is known but access hasn\'t been confirmed. Secure the introduction.',high:'No access to the decision-maker. This deal has no path to close without it.'},
+    timing_signals:{low:'Real forcing function confirmed. Urgency is genuine.',mod:'Some urgency, but timeline is soft. Test it again before investing more resource.',high:'No forcing function detected. This may never move. Qualify out or park.'},
+  };
+  return(bdrDetails[k]?.[level])||verdictDetail(k,sc,level);
+}
+
+function verdictDetail(k,sc,level){
+  const a=S.ans;
+  const details={
+    icp:{
+      low:'Implementation readiness confirmed. Change appetite and ownership are strong.',
+      mod:'Some readiness gaps detected. Address change management before advancing.',
+      high:'Serious implementation risk. No clear owner, resistant culture, or unready data.',
+    },
+    champion:{
+      low:'Champion is actively selling for you internally. Protect and leverage this relationship.',
+      mod:'Champion is responsive but not yet taking independent action. Coach them.',
+      high:a.champ_power==='lost'?'Champion has left or gone silent. This deal is in serious jeopardy.':'Champion lacks real influence or motivation. Find a more powerful internal ally.',
+    },
+    budget:{
+      low:'Budget is confirmed or in a clear approval cycle. Financial risk is low.',
+      mod:'Budget is being built bottom-up. Business case may take longer than expected.',
+      high:'No budget discussion has occurred. High probability this is a shopping exercise.',
+    },
+    exec:{
+      low:'Executive sponsor is engaged and driving urgency. Strong close signal.',
+      mod:'Executive is named but passive. Paper sponsorship — validate before committing forecast.',
+      high:a.exec_presence==='left'?'Executive sponsor has left. Deal is at critical risk — re-engage or reassess.':'No executive sponsor identified. This deal lacks the authority to close.',
+    },
+    competitive:{
+      low:'Strong competitive position — you are the preferred choice.',
+      mod:'Competitive — you are in an even fight. Differentiate on outcomes, not features.',
+      high:a.comp_landscape==='build'?'Internal build is your real competitor. Reframe the conversation around speed-to-value and risk.':'You are behind or your position is unknown. Immediate intervention required.',
+    },
+    procurement:{
+      low:'Procurement is manageable and change appetite is present.',
+      mod:'Some process friction or change resistance detected. Address proactively.',
+      high:'High process risk or change-resistant culture. Post-sale success is at risk.',
+    },
+    forecast:{
+      low:'Deal has genuine momentum, mutual commitment, and a confirmed path forward.',
+      mod:'Some uncertainty in timeline or next steps. Resolve before committing to forecast.',
+      high:a.slip_surprise==='expecting'?'You are already expecting a delay. Remove from commit forecast immediately.':'Critical forecast risk. Stall signals present across multiple areas.',
+    },
+  };
+  return details[k]?.[level]||'';
+}
+
+// ── BDR-only diagnostic modules ──
+const BDR_MODULES={
+  pain_reality:{label:'Pain Reality',icon:'◈',desc:'Is the problem real and felt — or are they just browsing?',
+    qs:[
+      {id:'pain_depth',q:'How specifically did they describe the operational impact of the current problem?',sub:'Vague dissatisfaction ≠ pain. Specific, measurable frustration = buying motivation.',
+       opts:[{l:'Quantified — named costs, delays, or failures in specific terms',sub:'Real pain with evidence',v:'quantified',s:22},{l:'Described clearly but without numbers',sub:'Real pain, needs amplifying',v:'described',s:14},{l:'Vague — "things could be better" or "we want to improve"',sub:'Curiosity, not pain',v:'vague',s:2},{l:'Pain not surfaced yet',sub:'Critical discovery gap',v:'none',s:-10}]},
+      {id:'pain_owner',q:'Does the person you\'re speaking with personally feel this pain — or are they researching on behalf of someone else?',sub:'"Dad asks kids to look" is the most common false-positive in early discovery.',
+       opts:[{l:'Yes — personally affected, has a stake in solving it',sub:'Real owner',v:'owner',s:20},{l:'Partially — they feel it but the real owner is above them',sub:'Coach them upward',v:'partial',s:10},{l:'No — doing research, decision is elsewhere',sub:'Influencer, not buyer',v:'researcher',s:2},{l:'Not yet established',sub:'Must clarify before advancing',v:'unknown',s:-8}]},
+    ]},
+  access_path:{label:'Access Path',icon:'◉',desc:'Can you reach the person who can actually say yes?',
+    qs:[
+      {id:'dm_identified',q:'Have you identified who will make or strongly influence the final decision?',sub:'Most deals stall because the seller never reached the actual decision-maker.',
+       opts:[{l:'Yes — named and I\'ve spoken with them directly',sub:'Direct access confirmed',v:'direct',s:22},{l:'Named but no direct conversation yet',sub:'Access needed — act now',v:'named',s:10},{l:'Known by function (CFO, CEO) but not by name',sub:'Too vague — find the name',v:'function',s:4},{l:'Unknown who makes the final call',sub:'Critical qualification gap',v:'unknown',s:-12}]},
+      {id:'intro_willingness',q:'Has your contact offered or agreed to introduce you to a senior stakeholder or decision-maker?',sub:'A contact who won\'t introduce you upward is either not a champion or is protecting territory.',
+       opts:[{l:'Yes — proactively offered or already made the intro',sub:'Champion behavior',v:'yes',s:22},{l:'Agreed when asked — not happened yet',sub:'Hold them to it',v:'agreed',s:12},{l:'Hesitant — made excuses or deflected',sub:'Access barrier',v:'hesitant',s:-4},{l:'No access offered or topic not raised',sub:'Red flag',v:'no',s:-14}]},
+    ]},
+  timing_signals:{label:'Timing Signals',icon:'◐',desc:'Is there a real forcing function — or just stated urgency?',
+    qs:[
+      {id:'timing_force',q:'What specific event is making this a priority right now — not 6 months ago?',sub:'"We\'ve been meaning to do this" is not a trigger. A forcing function creates urgency that cannot be postponed.',
+       opts:[{l:'Vendor forcing migration, support ending, or contract expiry',sub:'External forcing function',v:'vendor',s:22},{l:'Business event: acquisition, new plant, capital raise',sub:'Growth trigger',v:'growth',s:20},{l:'New leadership hire mandating change',sub:'Top-down urgency',v:'newhire',s:18},{l:'Internal frustration reached tipping point',sub:'Pain-driven — validate depth',v:'tipping',s:12},{l:'No specific trigger — general interest',sub:'No forcing function',v:'none',s:-10}]},
+      {id:'timeline_test',q:'When you tested "what happens if this takes 6 more months?" — how did they respond?',sub:'A real deadline creates discomfort. A soft deadline gets shrugged off.',
+       opts:[{l:'Significant concern — named specific consequences',sub:'Timeline is real',v:'concerned',s:20},{l:'Some concern — "not ideal but manageable"',sub:'Moderate urgency',v:'mild',s:10},{l:'Comfortable — "no big deal, we can wait"',sub:'No real urgency',v:'comfortable',s:-8},{l:'Haven\'t tested the timeline yet',sub:'Do this before your next call',v:'untested',s:-6}]},
+    ]},
+};
+function narrative(sc){
+  const a=S.ans;const bits=[];
+  if(a.origin==='exec'||a.pain_origin==='exec')bits.push('strong executive-initiated momentum');
+  else if(a.origin==='inbound'||a.pain_origin==='vague')bits.push('unverified interest with no clear burning platform');
+  if(a.access==='exec'||a.access==='multi')bits.push('multi-threaded executive access');
+  else if(a.access==='junior')bits.push('limited access at researcher level — no economic buyer engaged');
+  if(a.champ_action==='gone')bits.push('champion has disengaged');
+  if(a.exec_presence==='none'||a.exec_presence==='left')bits.push('no confirmed executive sponsor');
+  if(a.budget_status==='none')bits.push('no budget conversation has occurred');
+  if(a.slip_surprise==='expecting')bits.push('seller is already expecting a delay');
+  if(a.urgency==='false')bits.push('"ASAP" urgency without a business case — classic stall signal');
+  if(a.cost_na==='minimal')bits.push('minimal consequence of inaction');
+  if(a.comp_landscape==='build')bits.push('internal build competing for the same budget');
+  if(a.post_demo==='quiet')bits.push('prospect went quiet after last meaningful interaction');
+  if(a.initiative_direction==='unknown')bits.push('initiative direction (top-down vs bottom-up) not yet established');
+  const lead=sc>=65?'This opportunity shows':'This deal currently exhibits';
+  let n=bits.length>=2?`${lead} ${bits.slice(0,2).join(' combined with ')}.`:`${lead} mixed signals requiring deeper qualification.`;
+  if(bits.length>2)n+=` Additional risk factors: ${bits.slice(2).join('; ')}.`;
+  if(sc>=70)n+=' Pipeline integrity is solid — focus on protecting momentum and confirming commercials.';
+  else if(sc>=40)n+=' Targeted intervention on the flagged signals can significantly improve close probability.';
+  else n+=' Significant requalification is recommended before this deal is included in any forecast.';
+  return n;
+}
+
+// ── Role Output ──
+function roleOutput(sc){
+  const a=S.ans,r=S.role;
+  if(r==='bdr'){
+    const isReal=sc>=50;
+    return[
+      {l:'Opportunity Verdict',v:isReal?'This looks like a real opportunity worth advancing to an AE.':'Qualification gaps remain. Do not advance until pain, authority, and trigger are confirmed.'},
+      {l:'Most Important Next Question',v:a.initiative_direction==='unknown'?'"Who made the decision to start looking — was it leadership or the team? And who is accountable for the outcome?"':a.bdr_hot_trigger==='none'?'"What specifically is making this a priority right now, as opposed to 6 months ago?"':'"Can you introduce me to the person who is sponsoring this initiative internally?"'},
+      {l:'Recommended Next Step',v:isReal?'Schedule a discovery call with an AE present. Focus on validating pain depth and identifying the economic buyer.':'Run a temperature check call focused only on: 1) Is the pain real? 2) Who owns it? 3) Is there a real trigger?'},
+    ];
+  }
+  if(r==='ae'){
+    return[
+      {l:'Top Risk',v:a.urgency==='false'?'⚠ Stated urgency without a business case or approval — high stall probability. Probe the real forcing function.':a.access==='junior'?'⚠ No economic buyer engaged. Late-stage stall probability is high.':'✓ Core signals appear solid. Monitor next-step commitment closely.'},
+      {l:'Buyer Behavior Signal',v:a.post_demo==='quiet'?'⚠ Prospect went quiet after last interaction — disengage signal. Reconnect with a value-led message, not a follow-up.':a.post_demo==='intro'?'✓ Champion introduced new stakeholders — this is active buying behavior. Advance quickly.':'Monitor next interaction carefully — behavior between meetings reveals true intent.'},
+      {l:'Deal Strategy',v:a.comp_landscape==='build'?'Internal build is your real rival. Quantify the hidden cost: time to build, distraction, maintenance burden, risk of failure.':a.cost_na==='minimal'?'Amplify the cost of inaction. Make staying the same more expensive than moving forward.':'Reinforce differentiation with outcome-specific proof points aligned to their stated success criteria.'},
+    ];
+  }
+  if(r==='senior'){
+    return[
+      {l:'Political Risk',v:a.exec_presence==='none'?'HIGH — No exec sponsor. You may be working with someone who cannot approve. Escalate immediately.':a.champ_power==='junior'?'MODERATE — Champion lacks real influence. Coach them or identify a more powerful internal ally.':'LOW — Executive engagement confirmed. Protect this relationship at all costs.'},
+      {l:'Competitive Intelligence',v:a.comp_landscape==='build'?'Internal build is the real threat. Don\'t compete on features — compete on risk, speed-to-value, and failure probability of a DIY approach.':a.existing_vendor==='satisfied'?'Incumbent is strong. Displacement requires specific pain — not general dissatisfaction. Find the fracture point.':'Position on business outcomes and references. Features are table stakes at this level.'},
+      {l:'Forecast Assessment',v:a.slip_surprise==='expecting'?'⚠ Remove from commit. Seller is already expecting a delay — this should be Best Case or Upside only.':sc>=65?'Commit-eligible with confirmed next steps and commercial timeline.':'Best Case. Resolve champion, budget, or exec gaps before committing.'},
+    ];
+  }
+  if(r==='leader'){
+    return[
+      {l:'Forecast Recommendation',v:sc>=70?'✓ Commit-eligible — confirm close plan, commercial timeline, and legal status.':sc>=50?'Best Case / Upside — resolve the top two risk signals within 7 days before committing.':'✗ Not forecast-ready. Requalify or reallocate rep time to higher-probability deals.'},
+      {l:'Inspection Question',v:a.access!=='exec'&&a.access!=='multi'?'"Who specifically has confirmed executive sponsorship — name, title, and have you met with them directly?"':a.next_step!=='yes'?'"What is the mutually agreed next step and who owns it from their side — do you have it in writing?"':'"What would cause this deal to slip — and what is your plan if that happens?"'},
+      {l:'Pipeline Integrity Signal',v:a.slip_surprise==='expecting'?'⚠ Rep is already expecting delay. Immediate deal review required — update CRM and forecast.':a.urgency==='false'?'⚠ Urgency appears manufactured. Flag for pipeline review — stall probability is high.':'✓ Deal signals are consistent with momentum. Maintain inspection cadence.'},
+    ];
+  }
+  return[];
+}
+
+// ── Helpers ──
+function sc(col){return col==='green'?'var(--green)':col==='amber'?'var(--amber)':'var(--red)';}
+function pillcls(col){return col==='green'?'pg':col==='amber'?'pa':'pr';}
+
+function sigRow(label,val,map,good,bad){
+  if(!val)return'';
+  const d=map[val]||val;
+  const cls=good.includes(val)?'pg':bad.includes(val)?'pr':'pa';
+  const ic=good.includes(val)?'✓':bad.includes(val)?'✕':'~';
+  return`<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)"><span style="font-size:.83rem;color:var(--sub)">${label}</span><span class="pill ${cls}">${ic} ${d}</span></div>`;
+}
+
+function signalTable(){
+  const a=S.ans;let h='';
+  h+=sigRow('Deal Origin',a.origin||a.pain_origin,{exec:'Executive',pain:'Operational',compliance:'Compliance',replace:'Replacement',inbound:'Inbound',specific:'Real Pain',vague:'Exploring',forced:'Forced Migration'},['exec','pain','compliance','specific','forced'],['inbound','vague']);
+  h+=sigRow('Stakeholder Access',a.access,{exec:'Exec Sponsor',multi:'Multi-Thread',manager:'Manager',power:'Power User',junior:'Junior Only'},['exec','multi'],['junior']);
+  h+=sigRow('Urgency Signal',a.urgency,{deadline:'Hard Deadline',budget:'Budget Cycle',competitive:'Competitive',false:'Stated Only',exploring:'No Urgency'},['deadline','budget'],['false','exploring']);
+  h+=sigRow('Buyer Behavior',a.post_demo,{intro:'Introduced Contacts',docs:'Shared Data',demo:'Requested Demo',quiet:'Went Silent',proc:'Brought Procurement'},['intro','docs'],['quiet']);
+  h+=sigRow('Champion Status',a.champ_action,{active:'Actively Selling',sharing:'Sharing Internally',passive:'Passive',gone:'Gone Silent'},['active','sharing'],['gone']);
+  h+=sigRow('Exec Sponsor',a.exec_presence,{yes:'Confirmed',passive:'Paper Sponsor',none:'Not Found',left:'Departed'},['yes'],['none','left']);
+  h+=sigRow('Budget Status',a.budget_status,{approved:'Approved',cycle:'In Cycle',bottomup:'Business Case',none:'Not Discussed'},['approved','cycle'],['none']);
+  h+=sigRow('Slip Risk',a.slip_surprise,{very:'Very Surprised',somewhat:'Somewhat',not:'Not Surprised',expecting:'Expecting Delay'},['very','somewhat'],['not','expecting']);
+  return h;
+}
+
+function scoreRing(score,col){
+  const C=2*Math.PI*52,off=C-(score/100)*C;
+  const color=sc(col);
+  return`<svg width="160" height="160" viewBox="0 0 120 120" style="display:block;margin:0 auto">
+    <circle cx="60" cy="60" r="52" fill="none" stroke="var(--border)" stroke-width="6"/>
+    <circle cx="60" cy="60" r="52" fill="none" stroke="${color}" stroke-width="6"
+      stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C}"
+      id="arc" transform="rotate(-90 60 60)"
+      style="transition:stroke-dashoffset 1.3s cubic-bezier(.4,0,.2,1);${col==='green'?'filter:drop-shadow(0 0 7px '+color+')':''}"/>
+    <text x="60" y="55" text-anchor="middle" fill="white" font-family="Syne,sans-serif" font-size="22" font-weight="800">${score}</text>
+    <text x="60" y="70" text-anchor="middle" fill="var(--sub)" font-family="DM Mono,monospace" font-size="8">/100</text>
+  </svg>`;
+}
+
+// ══════════════════════════════════════════════════════
+// QUESTION RENDERER
+// ══════════════════════════════════════════════════════
+let qList=[],qIdx=0,qDone=()=>{};
+
+function renderQ(list,start,onDone){qList=list;qIdx=start;qDone=onDone;showQ();}
+
+function showQ(){
+  const q=qList[qIdx];
+  document.getElementById('hphase').style.display='inline-flex';
+  const pLabel={context:'Deal Context',quick:'Quick Read',deep:'Deep Read',module:'Diagnostic'}[phase]||'Qualifying';
+  document.getElementById('hpt').textContent=pLabel+(phase==='module'?' · '+(MODULES[modChosen]?.label||''):'');
+
+  const prev=qIdx>0?`<button class="ghost" onclick="qBack()">← Back</button>`:'<div></div>';
+  const hasPrev=S.ans[q.id];
+  document.getElementById('qwrap').innerHTML=`<div class="fu" style="padding-bottom:40px">
+    <div style="margin-bottom:18px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span class="chip">${pLabel}${phase==='module'?' · '+(MODULES[modChosen]?.label||''):''}</span>
+        <span style="font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace">${qIdx+1} / ${qList.length}</span>
+      </div>
+      <div style="height:3px;background:var(--border);border-radius:99px;overflow:hidden">
+        <div style="height:100%;width:${Math.round(((qIdx+1)/qList.length)*100)}%;background:linear-gradient(90deg,var(--gdim),var(--green));border-radius:99px;transition:width .4s;box-shadow:0 0 8px var(--gg)"></div>
+      </div>
+    </div>
+    <h2 class="fd" style="font-size:1.3rem;font-weight:700;letter-spacing:-.02em;color:#fff;margin:0 0 5px;line-height:1.3">${q.q}</h2>
+    ${q.sub?`<p style="color:var(--sub);font-size:.83rem;margin:0 0 20px;line-height:1.5;font-style:italic">${q.sub}</p>`:'<div style="margin-bottom:20px"></div>'}
+    <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:26px" id="opts">
+      ${q.opts.map(o=>`<button class="opt${S.ans[q.id]===o.v?' sel':''}" data-v="${o.v}" onclick="pick(this,'${q.id}','${o.v}')">
+        <span>${o.l}</span>
+        ${o.sub?`<span class="opt-sub">${o.sub}</span>`:''}
+      </button>`).join('')}
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+      ${prev}
+      <button class="btn" id="nxt" onclick="qNext()" ${!hasPrev?'disabled':''}>
+        ${qIdx<qList.length-1?'Continue →':'See Assessment →'}
+      </button>
+    </div>
+  </div>`;
+}
+
+function pick(btn,id,val){
+  document.querySelectorAll('#opts .opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  S.ans[id]=val;
+  if(id==='role')S.role=val;
+  if(id==='stage')S.stage=val;
+  document.getElementById('nxt').disabled=false;
+}
+
+function qNext(){qIdx++;if(qIdx<qList.length)showQ();else qDone();}
+function qBack(){if(qIdx>0){qIdx--;showQ();}}
+
+// ══════════════════════════════════════════════════════
+// FLOW
+// ══════════════════════════════════════════════════════
+function beginFlow(){
+  const email=document.getElementById('em').value.trim();
+  if(!email||!email.includes('@')){document.getElementById('em').style.borderColor='var(--red)';return;}
+  if(locked()){showLock();return;}
+  S.email=email;
+  document.getElementById('s-hero').style.display='none';
+  document.getElementById('s-q').style.display='block';
+  phase='context';
+  renderQ(CTX_QS,0,afterContext);
+}
+
+function afterContext(){
+  phase='quick';
+  const quickQs=S.role==='bdr'?BDR_QUICK:AE_QUICK;
+  renderQ(quickQs,0,afterQuick);
+}
+
+function afterQuick(){
+  // Quick assessment — directional only
+  const quickQs=S.role==='bdr'?BDR_QUICK:AE_QUICK;
+  const sc2=scoreList(quickQs,S.ans);
+  const st=status(sc2);
+  const color=sc(st.c);
+  const isBdr=S.role==='bdr';
+
+  document.getElementById('qwrap').innerHTML=`<div class="fu" style="padding-bottom:40px">
+    <div class="chip" style="margin-bottom:14px"><span class="dot"></span>Quick Read Complete</div>
+    <h2 class="fd" style="font-size:1.4rem;font-weight:800;color:#fff;margin:0 0 4px">Early Signal: <span style="color:${color}">${st.l}</span></h2>
+    <p style="color:var(--sub);font-size:.84rem;margin:0 0 20px">Based on ${quickQs.length} signals — directional read only. ${isBdr?'':'Deep read will reveal hidden risks.'}</p>
+
+    <div class="glass" style="padding:18px;margin-bottom:16px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+        <div style="text-align:center;min-width:68px">
+          <div class="fd" style="font-size:2.5rem;font-weight:800;color:${color};line-height:1">${sc2}</div>
+          <div style="font-size:.67rem;color:var(--sub);font-family:'DM Mono',monospace">/100</div>
+        </div>
+        <div style="flex:1;min-width:180px">
+          <p style="color:var(--sub);font-size:.83rem;margin:0;line-height:1.6">${quickSignal(sc2,isBdr)}</p>
+        </div>
+      </div>
+    </div>
+
+    ${isBdr ? `
+      <div class="glass" style="padding:18px;border-color:rgba(34,211,160,.2);margin-bottom:14px">
+        <h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 4px">${sc2>=50?'Advance to Full Diagnostic':'Requalify Before Advancing'}</h3>
+        <p style="color:var(--sub);font-size:.82rem;margin:0 0 14px">${sc2>=50?'This looks like a real opportunity. Run a deeper assessment to validate before handing to an AE.':'Qualification gaps detected. A deeper diagnostic will clarify whether to advance or disqualify.'}</p>
+        <button class="btn" style="width:100%" onclick="startDeep()">Run Full Diagnostic →</button>
+      </div>
+      <div style="text-align:center"><button class="ghost" onclick="renderConfSlider()" style="font-size:.82rem">Get basic report now</button></div>
+    ` : `
+      <div class="glass" style="padding:18px;border-color:rgba(34,211,160,.2);margin-bottom:14px">
+        <h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 4px">Go Deeper — 3 More Signals</h3>
+        <p style="color:var(--sub);font-size:.82rem;margin:0 0 14px">Consequence, buyer maturity, and behavior between conversations — the three signals most deals hide.</p>
+        <button class="btn" style="width:100%" onclick="startDeep()">Deep Read →</button>
+      </div>
+      <div style="text-align:center"><button class="ghost" onclick="renderConfSlider()" style="font-size:.82rem">Get basic report without deep read</button></div>
+    `}
+  </div>`;
+}
+
+function quickSignal(sc2,isBdr){
+  if(isBdr){
+    if(sc2>=65)return'Strong early signals — real pain, clear trigger, and a direction on authority. Worth advancing to full qualification.';
+    if(sc2>=40)return'Mixed signals. Pain may be real but trigger or authority is unclear. Validate before investing more time.';
+    return'Low-signal opportunity. Exploration mode detected — no clear trigger or authority structure. Requalify intent.';
+  }
+  if(sc2>=65)return'Strong origin and access signals. Deep read will confirm whether urgency and consequence are real.';
+  if(sc2>=38)return'Mixed signals from origin or access. The deep read will likely expose where the real risk is hiding.';
+  return'Weak signals across origin and access. High stall probability — the deep read is essential before any forecast inclusion.';
+}
+
+function startDeep(){
+  phase='deep';
+  const deepQs=S.role==='bdr'?[]:AE_DEEP;
+  if(S.role==='bdr'){
+    // BDR goes straight to module selection after quick
+    showInterim();
+  } else {
+    renderQ(deepQs,0,afterDeep);
+  }
+}
+
+function afterDeep(){showInterim();}
+
+function showInterim(){
+  const isBdr=S.role==='bdr';
+  const activeModules=isBdr?BDR_MODULES:MODULES;
+  const quickQs=isBdr?BDR_QUICK:AE_QUICK;
+  const deepQs=isBdr?[]:AE_DEEP;
+  const coreSoFar=[...quickQs,...deepQs];
+  let allSoFar=[...coreSoFar];
+  completedMods.forEach(k=>{if(activeModules[k])allSoFar.push(...activeModules[k].qs);});
+  const sc2=scoreList(allSoFar,S.ans);
+  const st=status(sc2);
+  const fc=forecast(sc2,7);
+  const color=sc(st.c);
+  const allModKeys=Object.keys(activeModules);
+  const remaining=allModKeys.filter(k=>!completedMods.includes(k));
+  const allDone=remaining.length===0;
+
+  const verdictCards=completedMods.map(k=>{
+    const mod=activeModules[k];if(!mod)return'';
+    const v=moduleVerdict(k,activeModules);
+    return`<div class="verdict ${v.cls}" style="margin-bottom:8px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+        <span style="font-size:.8rem">${v.icon}</span>
+        <span class="fd" style="font-size:.85rem;font-weight:700;color:#fff">${v.text}</span>
+      </div>
+      <p style="font-size:.8rem;color:var(--sub);margin:0;line-height:1.5">${v.detail}</p>
+    </div>`;
+  }).join('');
+
+  const modCards=remaining.map(k=>`
+    <div class="modcard" data-m="${k}" onclick="pickModule('${k}',this)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="color:var(--green);font-size:1rem;flex-shrink:0">${activeModules[k].icon}</span>
+        <div>
+          <div class="fd" style="color:#fff;font-size:.86rem;font-weight:700">${activeModules[k].label}</div>
+          <div style="font-size:.74rem;color:var(--muted);margin-top:2px">${activeModules[k].desc}</div>
+        </div>
+      </div>
+    </div>`).join('');
+
+  const doneChips=completedMods.map(k=>`<span class="pill pg" style="font-size:.67rem">${activeModules[k]?.icon} ${activeModules[k]?.label}</span>`).join('');
+
+  document.getElementById('qwrap').innerHTML=`<div class="fu" style="padding-bottom:40px">
+    <div class="chip" style="margin-bottom:12px"><span class="dot"></span>${completedMods.length?'Diagnostic Update':'Deep Read Complete'}</div>
+    <h2 class="fd" style="font-size:1.35rem;font-weight:800;color:#fff;margin:0 0 3px">Current Score: <span style="color:${color}">${st.l}</span></h2>
+    <p style="color:var(--sub);font-size:.82rem;margin:0 0 16px">${completedMods.length} diagnostic${completedMods.length!==1?'s':''} complete · ${remaining.length} area${remaining.length!==1?'s':''} uncovered</p>
+
+    <!-- Score summary -->
+    <div class="glass" style="padding:16px;margin-bottom:14px">
+      <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:${signalTable()?'14px':'0'}">
+        <div style="text-align:center;min-width:64px">
+          <div class="fd" style="font-size:2.4rem;font-weight:800;color:${color};line-height:1">${sc2}</div>
+          <div style="font-size:.67rem;color:var(--sub);font-family:'DM Mono',monospace">/100</div>
+        </div>
+        <div style="flex:1">
+          <span class="pill ${pillcls(fc.c)}" style="margin-bottom:6px;display:inline-block">${fc.l}</span>
+          ${doneChips?`<div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:6px">${doneChips}</div>`:''}
+          <p style="color:var(--sub);font-size:.81rem;margin:0;line-height:1.5">${interimSignal(sc2)}</p>
+        </div>
+      </div>
+      ${signalTable()?`<div>${signalTable()}</div>`:''}
+    </div>
+
+    <!-- Module verdicts -->
+    ${verdictCards?`<div style="margin-bottom:14px">${verdictCards}</div>`:''}
+
+    ${allDone?`
+      <div class="ok" style="border-radius:8px;margin-bottom:14px">✓ All diagnostic areas covered. Your full report is ready.</div>
+      <button class="btn" style="width:100%;margin-bottom:10px" onclick="renderConfSlider()">Generate Final Report →</button>
+    `:`
+      <div class="glass" style="padding:18px;border-color:rgba(245,158,11,.18);margin-bottom:14px">
+        <h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 4px">Run Another Diagnostic</h3>
+        <p style="color:var(--sub);font-size:.81rem;margin:0 0 12px">Each module exposes a different hidden risk. The more you cover, the more accurate your assessment.</p>
+        <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px" id="mod-grid">${modCards}</div>
+        <button class="btn" id="mod-btn" onclick="startModule()" disabled style="width:100%">Run Diagnostic →</button>
+      </div>
+      <div style="text-align:center"><button class="ghost" onclick="renderConfSlider()" style="font-size:.81rem">Generate report with what I have</button></div>
+    `}
+  </div>`;
+}
+
+function interimSignal(sc2){
+  if(sc2>=70)return'Strong signals detected across covered areas. Additional modules will validate remaining blind spots.';
+  if(sc2>=45)return'Mixed signals — uncovered areas may be hiding the real risk. Consider running another diagnostic.';
+  return'Multiple risk signals detected. Covering remaining areas may reveal the critical failure point before it\'s too late.';
+}
+
+function pickModule(k,el){
+  if(completedMods.includes(k))return;
+  modChosen=k;
+  document.querySelectorAll('.modcard').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('mod-btn').disabled=false;
+}
+
+function startModule(){
+  if(!modChosen)return;
+  const activeModules=S.role==='bdr'?BDR_MODULES:MODULES;
+  phase='module';
+  renderQ(activeModules[modChosen].qs,0,afterModule);
+}
+
+function afterModule(){
+  if(modChosen&&!completedMods.includes(modChosen))completedMods.push(modChosen);
+  modChosen=null;
+  showInterim();
+}
+
+// ── Confidence slider ──
+function renderConfSlider(){
+  document.getElementById('qwrap').innerHTML=`<div class="fu" style="padding-bottom:40px">
+    <div class="chip" style="margin-bottom:14px">Confidence Check</div>
+    <h2 class="fd" style="font-size:1.3rem;font-weight:700;color:#fff;margin:0 0 5px">How confident are you in these answers?</h2>
+    <p style="color:var(--sub);font-size:.83rem;margin:0 0 22px;line-height:1.5;font-style:italic">"Don't stop at the first answer — 100% of insights hide in the next question." Honest calibration produces more useful output.</p>
+    <div class="glass" style="padding:18px;margin-bottom:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <span style="font-size:.7rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase">Confidence Level</span>
+        <span class="fd" style="font-size:1.9rem;font-weight:800;color:#fff" id="cv">${S.conf}<span style="color:var(--green);font-size:.85rem">/10</span></span>
+      </div>
+      <input type="range" min="1" max="10" value="${S.conf}" oninput="S.conf=+this.value;document.getElementById('cv').innerHTML=this.value+'<span style=color:var(--green);font-size:.85rem>/10</span>';document.getElementById('ch').textContent=confHelp(+this.value)"/>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:.7rem;color:var(--muted);font-family:'DM Mono',monospace"><span>Uncertain</span><span>Highly Confident</span></div>
+      <p id="ch" style="font-size:.81rem;color:var(--sub);margin:10px 0 0;font-style:italic">${confHelp(S.conf)}</p>
+    </div>
+    <button class="btn" style="width:100%" onclick="showResults()">Generate My Assessment →</button>
+  </div>`;
+}
+
+function confHelp(v){
+  if(v<=3)return'Low confidence — score will be adjusted down to reflect forecast risk.';
+  if(v<=5)return'Moderate confidence — score reflects your current qualification depth with some uncertainty.';
+  if(v<=7)return'Good confidence — output will be well-calibrated to your signals.';
+  return'High confidence — score slightly amplified for signal clarity.';
+}
+
+// ══════════════════════════════════════════════════════
+// RESULTS
+// ══════════════════════════════════════════════════════
+function showResults(){
+  lockIt();
+  bumpLocalStats(false); // count this assessment
+  document.getElementById('hphase').style.display='none';
+  document.getElementById('s-q').style.display='none';
+  document.getElementById('s-res').style.display='block';
+
+  const sc2=totalScore();
+  const st=status(sc2);
+  const fc=forecast(sc2,S.conf);
+  const narr=narrative(sc2);
+  const ro=roleOutput(sc2);
+  const color=sc(st.c);
+  const liText=encodeURIComponent(`Just ran a live deal through InsideCut.\n\nResult: ${st.l} · Score ${sc2}/100 · ${fc.l}\n\n"${narr.substring(0,160)}..."\n\n#sales #revops #pipeline #InsideCut`);
+  const liUrl=`https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Finsidecut.io&summary=${liText}`;
+  const activeModules=S.role==='bdr'?BDR_MODULES:MODULES;
+  const modVerdicts=completedMods.map(k=>{const v=moduleVerdict(k,activeModules);return`<div class="verdict ${v.cls}" style="margin-bottom:8px"><div style="display:flex;align-items:center;gap:8px;margin-bottom:4px"><span>${v.icon}</span><span class="fd" style="font-size:.85rem;font-weight:700;color:#fff">${v.text}</span></div><p style="font-size:.8rem;color:var(--sub);margin:0;line-height:1.5">${v.detail}</p></div>`;}).join('');
+  const roleSection=ro.length?`<div class="glass" style="padding:20px;margin-bottom:14px"><h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 12px">${S.role==='bdr'?'BDR Playbook':S.role==='ae'?'AE Deal Strategy':S.role==='senior'?'Senior AE Intelligence':'Sales Leader · Forecast'}</h3>${ro.map(i=>`<div style="padding:11px 13px;background:rgba(37,42,48,.4);border-radius:9px;border:1px solid var(--border);margin-bottom:8px"><div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;text-transform:uppercase;margin-bottom:4px">${i.l}</div><div style="font-size:.85rem;color:var(--text);line-height:1.6">${i.v}</div></div>`).join('')}</div>`:'';
+  document.getElementById('rwrap').innerHTML=`<div style="padding-bottom:60px"><div style="text-align:center;margin-bottom:20px" class="fu"><div class="chip" style="margin-bottom:12px;border-color:rgba(34,211,160,.3)"><span class="dot"></span>Deal Diagnostic Complete</div><h2 class="fd" style="font-size:1.5rem;font-weight:800;color:#fff;margin:0 0 3px">Deal Depth Report</h2><p style="color:var(--sub);font-size:.8rem;margin:0">${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})} · ${completedMods.length} module${completedMods.length!==1?'s':''} completed</p></div>
+  <div class="glass fu" style="padding:22px;margin-bottom:14px;text-align:center;${st.glow?'box-shadow:0 0 40px var(--gg)':''}"><div style="margin-bottom:14px">${scoreRing(sc2,st.c)}</div><div class="fd" style="font-size:1.5rem;font-weight:800;color:${color};margin-bottom:10px">${st.l}</div><div style="display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-bottom:14px"><span class="pill ${pillcls(fc.c)}">${fc.l}</span><span class="pill pm">${S.role==='bdr'?'BDR/SDR':S.role==='ae'?'Account Executive':S.role==='senior'?'Senior AE':'Sales Leader'}</span>${completedMods.map(k=>`<span class="pill pa">${activeModules[k]?.icon} ${activeModules[k]?.label}</span>`).join('')}</div><div style="padding:13px 15px;background:rgba(37,42,48,.5);border-radius:10px;border:1px solid var(--border);text-align:left"><div style="font-size:.67rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-bottom:5px">DEAL NARRATIVE</div><p style="color:var(--text);font-size:.86rem;line-height:1.7;margin:0">${narr}</p></div></div>
+  ${signalTable()?`<div class="glass" style="padding:18px;margin-bottom:14px"><h3 class="fd" style="color:#fff;font-size:.88rem;font-weight:700;margin:0 0 4px">Signal Breakdown</h3>${signalTable()}</div>`:''}
+  ${modVerdicts?`<div style="margin-bottom:14px">${modVerdicts}</div>`:''}
+  ${roleSection}
+  <div class="glass" style="padding:18px;border-color:rgba(34,211,160,.18);margin-bottom:14px"><h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 3px">Share to Unlock Another Assessment</h3><p style="color:var(--sub);font-size:.81rem;margin:0 0 12px">Share on LinkedIn to unlock another instant assessment instead of waiting 24 hours.</p><div style="background:rgba(37,42,48,.5);border:1px solid var(--border);border-radius:8px;padding:11px;margin-bottom:12px;font-size:.76rem;color:var(--sub);line-height:1.6;font-family:'DM Mono',monospace;white-space:pre-wrap" id="lipost">Just ran a live deal through InsideCut.\n\nResult: ${st.l} · ${sc2}/100 · ${fc.l}\n\n"${narr.substring(0,120)}..."\n\n#sales #revops #pipeline #InsideCut</div><div style="display:flex;flex-wrap:wrap;gap:8px"><a href="${liUrl}" target="_blank" rel="noopener" onclick="unlockShare()" class="lnbtn"><svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>Share on LinkedIn</a><button class="ghost" onclick="copyPost()" id="cpbtn">Copy Post</button></div></div>
+  <div class="glass" style="padding:18px;margin-bottom:18px"><h3 class="fd" style="color:#fff;font-size:.88rem;font-weight:700;margin:0 0 10px">How useful was this?</h3><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px" id="fbs">${['Very Useful','Useful','Neutral','Weak'].map(f=>`<button class="fbbtn" onclick="setFb('${f}',this)">${f}</button>`).join('')}</div><textarea class="inp" id="fbc" rows="2" placeholder="What did we miss? (Optional)" style="resize:vertical;margin-bottom:10px"></textarea><button class="btn" onclick="submitAll()">Submit & Save</button><span id="saved" style="display:none;margin-left:10px;color:var(--green);font-size:.81rem">✓ Saved</span></div>
+  <div style="text-align:center;margin-bottom:40px"><button class="ghost" onclick="restart()">Start New Assessment</button></div></div>`;
+  setTimeout(()=>{const a=document.getElementById('arc');if(a){const C=2*Math.PI*52;a.style.strokeDashoffset=C-(sc2/100)*C;}},200);
+  sendData();
+}
+function copyPost(){navigator.clipboard.writeText(document.getElementById('lipost')?.textContent||'').then(()=>{const b=document.getElementById('cpbtn');b.textContent='✓ Copied';b.style.color='var(--green)';setTimeout(()=>{b.textContent='Copy Post';b.style.color='';},2500);});}
+let fbRating='';
+function setFb(v,btn){fbRating=v;document.querySelectorAll('#fbs .fbbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
+function submitAll(){sendData(true);document.getElementById('saved').style.display='inline';}
+function restart(){if(locked()){showLock();return;}S={email:S.email,role:'ae',ans:{},conf:7};phase='context';modChosen=null;completedMods=[];document.getElementById('s-res').style.display='none';document.getElementById('s-q').style.display='block';renderQ(CTX_QS,0,afterContext);}
+function sendData(withFb=false){
+  if(!SHEETS_URL||SHEETS_URL.includes('YOUR_'))return;
+  const sc2=totalScore(),st=status(sc2),fc=forecast(sc2,S.conf);
+  const body={
+    email:S.email,
+    timestamp:new Date().toISOString(),
+    role:S.role,
+    stage:S.ans.stage,
+    cust_type:S.ans.cust_type,
+    industry:S.ans.industry,
+    product_cat:S.ans.product_cat,
+    ...S.ans,
+    confidence:S.conf,
+    final_score:sc2,
+    deal_status:st.l,
+    forecast:fc.l,
+    modules_completed:completedMods.join(','),
+    feedback_rating:withFb?fbRating:'',
+    feedback_comment:withFb?(document.getElementById('fbc')?.value||''):'',
+    total_shares:localStorage.getItem('ic_stat_shares')||0,
+    action:withFb?'submit':'save',
+  };
+  fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).catch(()=>{});
+}
+</script>
+
+<!--
+════════════════════════════════════════════════
+GOOGLE APPS SCRIPT SETUP
+════════════════════════════════════════════════
+
+1. Open your Google Sheet
+2. Create two sheets:
+   - Sheet 1 name: "Submissions"
+   - Sheet 2 name: "Stats"
+
+3. In Stats sheet, add headers in row 1:
+   A1: Total | B1: Today Date | C1: Today Count | D1: Shares
+
+4. Go to Extensions → Apps Script, paste this:
+
+────────────────────────────────────────────────
+function doPost(e) {
+  try {
+    var d = JSON.parse(e.postData.contents);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName('Submissions');
+    var stats = ss.getSheetByName('Stats');
+
+    sheet.appendRow([
+      d.timestamp, d.email, d.role, d.stage,
+      d.cust_type, d.industry, d.product_cat,
+      d.pain_origin, d.initiative_direction, d.bdr_hot_trigger,
+      d.origin, d.access, d.urgency, d.cost_na,
+      d.buyer_maturity, d.post_demo,
+      d.champ_action, d.champ_power, d.champ_motivation,
+      d.exec_presence, d.exec_urgency, d.budget_status,
+      d.comp_landscape, d.comp_position, d.existing_vendor,
+      d.proc_status, d.change_appetite,
+      d.icp_change_mgt, d.icp_ownership, d.icp_data_readiness,
+      d.slip_surprise, d.next_step, d.proj_team,
+      d.pain_depth, d.pain_owner,
+      d.dm_identified, d.intro_willingness,
+      d.timing_force, d.timeline_test,
+      d.confidence, d.final_score, d.deal_status, d.forecast,
+      d.modules_completed, d.feedback_rating, d.feedback_comment
+    ]);
+
+    // Update Stats sheet
+    var today = new Date().toDateString();
+    var total = (stats.getRange('A2').getValue() || 0) + 1;
+    var savedDay = stats.getRange('B2').getValue();
+    var todayCount = savedDay === today
+      ? (stats.getRange('C2').getValue() || 0) + 1 : 1;
+    var shares = stats.getRange('D2').getValue() || 0;
+    if (d.action === 'share') shares++;
+    stats.getRange('A2').setValue(total);
+    stats.getRange('B2').setValue(today);
+    stats.getRange('C2').setValue(todayCount);
+    stats.getRange('D2').setValue(shares);
+
+    return ContentService.createTextOutput('OK');
+  } catch(err) {
+    return ContentService.createTextOutput('Error: ' + err);
+  }
+}
+
+function doGet(e) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var stats = ss.getSheetByName('Stats');
+  var today = new Date().toDateString();
+  var savedDay = stats.getRange('B2').getValue();
+  var data = {
+    total: stats.getRange('A2').getValue() || 0,
+    today: savedDay === today ? (stats.getRange('C2').getValue() || 0) : 0,
+    shares: stats.getRange('D2').getValue() || 0
+  };
+  return ContentService
+    .createTextOutput(JSON.stringify(data))
+    .setMimeType(ContentService.MimeType.JSON);
+}
+────────────────────────────────────────────────
+
+5. Deploy → New Deployment → Web App
+   Execute as: Me | Who has access: Anyone
+   Copy the URL → paste into SHEETS_URL at top of this file
+
+6. The hero page counter fetches live stats via doGet.
+   Until connected, it shows local estimates from localStorage.
+
+Host free: drag HTML to netlify.com/drop or push to GitHub Pages.
+════════════════════════════════════════════════
+-->
+</body>
+</html>
