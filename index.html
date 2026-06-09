@@ -7,52 +7,109 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0d0f12;--card:#181c20;--border:#252a30;--muted:#3a4149;--text:#e8eaed;--sub:#7c8794;--green:#22d3a0;--gdim:#16a37a;--amber:#f59e0b;--red:#ef4444;--gg:rgba(34,211,160,.16);--ga:rgba(245,158,11,.13)}
+:root{
+  --bg:#0f1117;
+  --surface:#161a22;
+  --card:#1c2028;
+  --border:#2a3040;
+  --muted:#4a5568;
+  --text:#f0f2f5;
+  --sub:#9aa5b4;
+  --dim:#6b7685;
+  --green:#2ee8ac;
+  --gdim:#1ab87e;
+  --amber:#fbbf24;
+  --red:#f87171;
+  --gg:rgba(46,232,172,.18);
+  --ga:rgba(251,191,36,.14)
+}
 *{box-sizing:border-box}
 html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;margin:0;padding:0;min-height:100vh;-webkit-font-smoothing:antialiased}
+/* subtle gradient bg */
+body{background:linear-gradient(160deg,#0f1117 0%,#121620 60%,#0d1219 100%)}
 .fd{font-family:'Syne',sans-serif}.fm{font-family:'DM Mono',monospace}
-.glass{background:rgba(24,28,32,.75);backdrop-filter:blur(18px);border:1px solid var(--border);border-radius:16px}
-.opt{width:100%;padding:13px 16px;background:rgba(37,42,48,.5);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.88rem;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;transition:all .18s;line-height:1.4}
-.opt:hover{border-color:var(--green);color:#fff;background:rgba(34,211,160,.06)}
-.opt.sel{border-color:var(--green);background:rgba(34,211,160,.09);color:var(--green)}
-.opt-sub{display:block;font-size:.74rem;color:var(--muted);margin-top:3px;font-style:italic}
-.opt.sel .opt-sub{color:rgba(34,211,160,.6)}
-.btn{background:linear-gradient(135deg,var(--gdim),var(--green));color:#000;font-weight:700;font-family:'Syne',sans-serif;padding:13px 28px;border:none;border-radius:10px;cursor:pointer;transition:all .18s;font-size:.9rem;letter-spacing:.02em}
-.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px var(--gg)}
-.btn:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
-.ghost{background:transparent;color:var(--sub);border:1px solid var(--border);font-family:'DM Sans',sans-serif;padding:11px 22px;border-radius:10px;cursor:pointer;transition:all .18s;font-size:.88rem}
-.ghost:hover{border-color:var(--muted);color:var(--text)}
-.chip{display:inline-flex;align-items:center;gap:5px;padding:3px 11px;border-radius:99px;border:1px solid var(--green);color:var(--green);font-size:.7rem;font-family:'DM Mono',monospace;letter-spacing:.07em;text-transform:uppercase}
-.pill{display:inline-block;padding:3px 9px;border-radius:99px;font-size:.7rem;font-family:'DM Mono',monospace}
-.pg{background:rgba(34,211,160,.11);color:var(--green);border:1px solid rgba(34,211,160,.22)}
-.pa{background:rgba(245,158,11,.11);color:var(--amber);border:1px solid rgba(245,158,11,.22)}
-.pr{background:rgba(239,68,68,.11);color:#f87171;border:1px solid rgba(239,68,68,.22)}
-.pm{background:rgba(124,135,148,.09);color:var(--sub);border:1px solid var(--border)}
-.inp{width:100%;background:rgba(37,42,48,.6);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:13px 16px;font-size:.92rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .18s,box-shadow .18s}
-.inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(34,211,160,.1)}
+
+/* Cards */
+.glass{background:var(--card);border:1px solid var(--border);border-radius:16px}
+.glass-light{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px}
+
+/* Option buttons — much more visible */
+.opt{width:100%;padding:14px 18px;background:var(--surface);border:1.5px solid var(--border);border-radius:11px;color:var(--text);font-size:.9rem;font-family:'DM Sans',sans-serif;cursor:pointer;text-align:left;transition:all .18s;line-height:1.4}
+.opt:hover{border-color:var(--green);color:#fff;background:rgba(46,232,172,.07);transform:translateX(2px)}
+.opt.sel{border-color:var(--green);background:rgba(46,232,172,.11);color:var(--green);font-weight:500}
+.opt-sub{display:block;font-size:.75rem;color:var(--dim);margin-top:3px}
+.opt.sel .opt-sub{color:rgba(46,232,172,.55)}
+
+/* Primary CTA */
+.btn{background:linear-gradient(135deg,var(--gdim),var(--green));color:#051a10;font-weight:700;font-family:'Syne',sans-serif;padding:14px 30px;border:none;border-radius:11px;cursor:pointer;transition:all .2s;font-size:.92rem;letter-spacing:.02em}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 28px var(--gg)}
+.btn:disabled{opacity:.25;cursor:not-allowed;transform:none;box-shadow:none}
+
+/* Ghost — clearly visible secondary action */
+.ghost{background:rgba(255,255,255,.05);color:var(--sub);border:1.5px solid var(--border);font-family:'DM Sans',sans-serif;padding:12px 22px;border-radius:11px;cursor:pointer;transition:all .18s;font-size:.88rem}
+.ghost:hover{border-color:var(--sub);color:var(--text);background:rgba(255,255,255,.08)}
+
+/* Skip link — amber highlighted, clearly a deliberate choice */
+.skip-link{background:rgba(251,191,36,.1);color:var(--amber);border:1.5px solid rgba(251,191,36,.35);font-family:'DM Sans',sans-serif;font-weight:600;padding:11px 22px;border-radius:9px;cursor:pointer;transition:all .18s;font-size:.85rem;letter-spacing:.01em}
+.skip-link:hover{background:rgba(251,191,36,.18);border-color:var(--amber);color:#fff;transform:translateY(-1px)}
+
+.chip{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:99px;border:1px solid var(--green);color:var(--green);font-size:.7rem;font-family:'DM Mono',monospace;letter-spacing:.07em;text-transform:uppercase}
+.pill{display:inline-block;padding:3px 10px;border-radius:99px;font-size:.7rem;font-family:'DM Mono',monospace}
+.pg{background:rgba(46,232,172,.13);color:var(--green);border:1px solid rgba(46,232,172,.28)}
+.pa{background:rgba(251,191,36,.13);color:var(--amber);border:1px solid rgba(251,191,36,.28)}
+.pr{background:rgba(248,113,113,.13);color:#fca5a5;border:1px solid rgba(248,113,113,.25)}
+.pm{background:rgba(154,165,180,.1);color:var(--sub);border:1px solid var(--border)}
+
+/* Input */
+.inp{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:11px;color:var(--text);padding:13px 16px;font-size:.92rem;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .18s,box-shadow .18s}
+.inp:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(46,232,172,.12)}
 .inp::placeholder{color:var(--muted)}
-.warn{border-left:3px solid var(--amber);background:rgba(245,158,11,.06);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:var(--amber);line-height:1.5}
-.ok{border-left:3px solid var(--green);background:rgba(34,211,160,.06);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:var(--green);line-height:1.5}
-.bad{border-left:3px solid var(--red);background:rgba(239,68,68,.06);padding:12px 14px;border-radius:0 8px 8px 0;font-size:.84rem;color:#f87171;line-height:1.5}
-input[type=range]{-webkit-appearance:none;width:100%;height:4px;background:var(--border);border-radius:99px;outline:none}
-input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;background:var(--green);border-radius:50%;cursor:pointer;box-shadow:0 0 8px var(--gg)}
-.lnbtn{display:inline-flex;align-items:center;gap:7px;background:#0A66C2;color:#fff;font-family:'Syne',sans-serif;font-weight:700;padding:12px 22px;border-radius:10px;border:none;cursor:pointer;transition:all .18s;font-size:.88rem}
-.lnbtn:hover{background:#085faf;box-shadow:0 5px 20px rgba(10,102,194,.3)}
-.fbbtn{padding:9px 16px;border-radius:8px;border:1px solid var(--border);background:transparent;color:var(--sub);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s;font-size:.83rem}
-.fbbtn:hover,.fbbtn.on{border-color:var(--green);color:var(--green);background:rgba(34,211,160,.06)}
-.modcard{padding:13px 15px;background:rgba(37,42,48,.45);border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .18s;text-align:left}
-.modcard:hover{border-color:var(--green);background:rgba(34,211,160,.05)}
-.modcard.on{border-color:var(--green);background:rgba(34,211,160,.09)}
-.modcard.done{opacity:.45;cursor:not-allowed;border-style:dashed}
-.verdict{padding:14px 16px;border-radius:10px;margin-top:16px}
-.verdict-g{background:rgba(34,211,160,.07);border:1px solid rgba(34,211,160,.2)}
-.verdict-a{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.2)}
-.verdict-r{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.18)}
+
+/* Alert blocks — high contrast */
+.warn{border-left:3px solid var(--amber);background:rgba(251,191,36,.09);padding:13px 15px;border-radius:0 9px 9px 0;font-size:.85rem;color:#fcd34d;line-height:1.6}
+.ok{border-left:3px solid var(--green);background:rgba(46,232,172,.09);padding:13px 15px;border-radius:0 9px 9px 0;font-size:.85rem;color:var(--green);line-height:1.6}
+.bad{border-left:3px solid var(--red);background:rgba(248,113,113,.09);padding:13px 15px;border-radius:0 9px 9px 0;font-size:.85rem;color:#fca5a5;line-height:1.6}
+
+/* Privacy note — bright green tinted, unmissable */
+.privacy-note{display:flex;align-items:flex-start;gap:10px;padding:13px 16px;background:rgba(46,232,172,.08);border:1.5px solid rgba(46,232,172,.22);border-radius:10px}
+.privacy-note p{font-size:.83rem;color:#a7f3d0;line-height:1.6;margin:0;font-weight:500}
+
+/* Tagline highlight */
+.highlight{color:var(--green);font-weight:600}
+
+input[type=range]{-webkit-appearance:none;width:100%;height:5px;background:var(--border);border-radius:99px;outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;background:var(--green);border-radius:50%;cursor:pointer;box-shadow:0 0 10px var(--gg);border:3px solid var(--bg)}
+
+.lnbtn{display:inline-flex;align-items:center;gap:7px;background:#0A66C2;color:#fff;font-family:'Syne',sans-serif;font-weight:700;padding:13px 24px;border-radius:11px;border:none;cursor:pointer;transition:all .18s;font-size:.9rem}
+.lnbtn:hover{background:#085faf;box-shadow:0 6px 22px rgba(10,102,194,.35);transform:translateY(-1px)}
+.fbbtn{padding:10px 18px;border-radius:9px;border:1.5px solid var(--border);background:transparent;color:var(--sub);font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .18s;font-size:.84rem}
+.fbbtn:hover,.fbbtn.on{border-color:var(--green);color:var(--green);background:rgba(46,232,172,.07)}
+
+.modcard{padding:14px 16px;background:var(--surface);border-radius:11px;border:1.5px solid var(--border);cursor:pointer;transition:all .18s;text-align:left}
+.modcard:hover{border-color:var(--green);background:rgba(46,232,172,.06);transform:translateY(-1px)}
+.modcard.on{border-color:var(--green);background:rgba(46,232,172,.1)}
+.modcard.done{opacity:.4;cursor:not-allowed;border-style:dashed}
+
+.verdict{padding:14px 16px;border-radius:10px;margin-top:12px}
+.verdict-g{background:rgba(46,232,172,.08);border:1px solid rgba(46,232,172,.22)}
+.verdict-a{background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.22)}
+.verdict-r{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2)}
+
 @keyframes fu{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 .fu{animation:fu .35s ease forwards}
-@keyframes pr2{0%,100%{opacity:.5}50%{opacity:1}}
-.dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pr2 2s infinite;display:inline-block;flex-shrink:0}
-#lock{position:fixed;inset:0;background:rgba(13,15,18,.97);backdrop-filter:blur(20px);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:20px;text-align:center;padding:32px}
+@keyframes pr2{0%,100%{opacity:.4}50%{opacity:1}}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pr2 2s infinite;display:inline-block;flex-shrink:0;box-shadow:0 0 6px var(--green)}
+#lock{position:fixed;inset:0;background:rgba(10,12,17,.97);backdrop-filter:blur(24px);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:22px;text-align:center;padding:32px}
+
+/* Progress bar */
+.prog-track{height:4px;background:var(--border);border-radius:99px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--gdim),var(--green));border-radius:99px;transition:width .45s cubic-bezier(.4,0,.2,1);box-shadow:0 0 10px var(--gg)}
+
+/* Section heading */
+.section-label{font-size:.7rem;color:var(--dim);font-family:'DM Mono',monospace;letter-spacing:.09em;text-transform:uppercase;margin-bottom:6px}
+
+/* Divider */
+.div{height:1px;background:var(--border);margin:20px 0}
 </style>
 </head>
 <body>
@@ -105,32 +162,35 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
     </div>
 
     <!-- Live counter bar -->
-    <div style="display:flex;justify-content:center;gap:24px;flex-wrap:wrap;margin-bottom:28px;padding:14px 20px;background:rgba(37,42,48,.4);border-radius:12px;border:1px solid var(--border);max-width:440px;margin-left:auto;margin-right:auto">
+    <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:28px;padding:16px 24px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);max-width:440px;margin-left:auto;margin-right:auto;box-shadow:0 4px 20px rgba(0,0,0,.2)">
       <div style="text-align:center">
-        <div class="fd" style="font-size:1.5rem;font-weight:800;color:var(--green)" id="stat-total">—</div>
-        <div style="font-size:.7rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Deals Assessed</div>
+        <div class="fd" style="font-size:1.6rem;font-weight:800;color:var(--green)" id="stat-total">—</div>
+        <div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:3px">Deals Assessed</div>
       </div>
       <div style="width:1px;background:var(--border)"></div>
       <div style="text-align:center">
-        <div class="fd" style="font-size:1.5rem;font-weight:800;color:var(--amber)" id="stat-today">—</div>
-        <div style="font-size:.7rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">Today</div>
+        <div class="fd" style="font-size:1.6rem;font-weight:800;color:var(--amber)" id="stat-today">—</div>
+        <div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:3px">Today</div>
       </div>
       <div style="width:1px;background:var(--border)"></div>
       <div style="text-align:center">
-        <div class="fd" style="font-size:1.5rem;font-weight:800;color:var(--green)" id="stat-shares">—</div>
-        <div style="font-size:.7rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.05em;text-transform:uppercase;margin-top:2px">LinkedIn Shares</div>
+        <div class="fd" style="font-size:1.6rem;font-weight:800;color:var(--green)" id="stat-shares">—</div>
+        <div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:3px">LinkedIn Shares</div>
       </div>
     </div>
 
     <div class="glass" style="padding:28px;max-width:440px;margin:0 auto">
-      <h3 class="fd" style="color:#fff;font-size:1rem;font-weight:700;margin:0 0 4px">Start Your Diagnostic</h3>
-      <p style="color:var(--sub);font-size:.82rem;margin:0 0 18px">Enter your work email to begin. Takes 4–6 minutes.</p>
+      <h3 class="fd" style="color:#fff;font-size:1.05rem;font-weight:700;margin:0 0 4px">Start Your Diagnostic</h3>
+      <p style="color:var(--sub);font-size:.83rem;margin:0 0 18px">Enter your work email to begin. Takes 4–6 minutes.</p>
       <label style="font-size:.7rem;color:var(--sub);display:block;margin-bottom:6px;font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase">Work Email</label>
-      <input type="email" id="em" class="inp" placeholder="you@company.com" style="margin-bottom:10px"/>
-      <div style="display:flex;align-items:flex-start;gap:7px;padding:9px 11px;background:rgba(34,211,160,.05);border-radius:8px;border:1px solid rgba(34,211,160,.2);margin-bottom:16px">
-  <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="var(--green)" stroke-width="2.5" style="flex-shrink:0;margin-top:3px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-  <p style="font-size:.74rem;color:var(--green);font-weight:700;line-height:1.5;margin:0">No customer names, company names, or deal values collected.</p>
-</div>
+      <input type="email" id="em" class="inp" placeholder="you@company.com" style="margin-bottom:12px"/>
+
+      <!-- Privacy note — green tinted, clearly visible -->
+      <div class="privacy-note" style="margin-bottom:18px">
+        <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="#2ee8ac" stroke-width="2.2" style="flex-shrink:0;margin-top:1px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <p><strong style="color:var(--green)">Privacy first.</strong> No customer names, company names, or deal values collected. Ever.</p>
+      </div>
+
       <button class="btn" style="width:100%" onclick="beginFlow()">Begin Diagnostic →</button>
     </div>
   </div>
@@ -830,19 +890,23 @@ function afterQuick(){
     </div>
 
     ${isBdr ? `
-      <div class="glass" style="padding:18px;border-color:rgba(34,211,160,.2);margin-bottom:14px">
-        <h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 4px">${sc2>=50?'Advance to Full Diagnostic':'Requalify Before Advancing'}</h3>
-        <p style="color:var(--sub);font-size:.82rem;margin:0 0 14px">${sc2>=50?'This looks like a real opportunity. Run a deeper assessment to validate before handing to an AE.':'Qualification gaps detected. A deeper diagnostic will clarify whether to advance or disqualify.'}</p>
+      <div class="glass" style="padding:20px;border-color:rgba(46,232,172,.25);margin-bottom:16px;background:rgba(46,232,172,.04)">
+        <h3 class="fd" style="color:#fff;font-size:.92rem;font-weight:700;margin:0 0 6px">${sc2>=50?'Advance to Full Diagnostic':'Requalify Before Advancing'}</h3>
+        <p style="color:var(--sub);font-size:.83rem;margin:0 0 16px">${sc2>=50?'This looks like a real opportunity. A deeper diagnostic validates before handing to an AE.':'Qualification gaps detected. Deeper diagnostic will clarify whether to advance or disqualify.'}</p>
         <button class="btn" style="width:100%" onclick="startDeep()">Run Full Diagnostic →</button>
       </div>
-      <div style="text-align:center"><button class="ghost" onclick="renderConfSlider()" style="font-size:.82rem">Get basic report now</button></div>
+      <div style="text-align:center;padding:4px 0 12px">
+        <button class="skip-link" onclick="renderConfSlider()">⚡ Get basic report now</button>
+      </div>
     ` : `
-      <div class="glass" style="padding:18px;border-color:rgba(34,211,160,.2);margin-bottom:14px">
-        <h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 4px">Go Deeper — 3 More Signals</h3>
-        <p style="color:var(--sub);font-size:.82rem;margin:0 0 14px">Consequence, buyer maturity, and behavior between conversations — the three signals most deals hide.</p>
+      <div class="glass" style="padding:20px;border-color:rgba(46,232,172,.25);margin-bottom:16px;background:rgba(46,232,172,.04)">
+        <h3 class="fd" style="color:#fff;font-size:.92rem;font-weight:700;margin:0 0 6px">Go Deeper — 3 More Signals</h3>
+        <p style="color:var(--sub);font-size:.83rem;margin:0 0 16px">Consequence, buyer maturity, and behavior between conversations — the three signals most deals hide.</p>
         <button class="btn" style="width:100%" onclick="startDeep()">Deep Read →</button>
       </div>
-      <div style="text-align:center"><button class="ghost" onclick="renderConfSlider()" style="font-size:.82rem; font-weight: 700; color: var(--text); border-color: var(--muted);">Get basic report without deep read</button></div>
+      <div style="text-align:center;padding:4px 0 12px">
+        <button class="skip-link" onclick="renderConfSlider()">⚡ Get basic report without deep read</button>
+      </div>
     `}
   </div>`;
 }
@@ -940,13 +1004,15 @@ function showInterim(){
       <div class="ok" style="border-radius:8px;margin-bottom:14px">✓ All diagnostic areas covered. Your full report is ready.</div>
       <button class="btn" style="width:100%;margin-bottom:10px" onclick="renderConfSlider()">Generate Final Report →</button>
     `:`
-      <div class="glass" style="padding:18px;border-color:rgba(245,158,11,.18);margin-bottom:14px">
+      <div class="glass" style="padding:18px;border-color:rgba(251,191,36,.2);margin-bottom:14px;background:rgba(251,191,36,.03)">
         <h3 class="fd" style="color:#fff;font-size:.9rem;font-weight:700;margin:0 0 4px">Run Another Diagnostic</h3>
         <p style="color:var(--sub);font-size:.81rem;margin:0 0 12px">Each module exposes a different hidden risk. The more you cover, the more accurate your assessment.</p>
         <div style="display:flex;flex-direction:column;gap:7px;margin-bottom:12px" id="mod-grid">${modCards}</div>
         <button class="btn" id="mod-btn" onclick="startModule()" disabled style="width:100%">Run Diagnostic →</button>
       </div>
-      <div style="text-align:center"><button class="ghost" onclick="renderConfSlider()" style="font-size:.81rem">Generate report with what I have</button></div>
+      <div style="text-align:center;padding:4px 0 12px">
+        <button class="skip-link" onclick="renderConfSlider()">⚡ Generate report with what I have</button>
+      </div>
     `}
   </div>`;
 }
