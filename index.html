@@ -162,21 +162,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
     </div>
 
     <!-- Live counter bar -->
-    <div style="display:flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:28px;padding:16px 24px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);max-width:440px;margin-left:auto;margin-right:auto;box-shadow:0 4px 20px rgba(0,0,0,.2)">
-      <div style="text-align:center">
-        <div class="fd" style="font-size:1.6rem;font-weight:800;color:var(--green)" id="stat-total">—</div>
-        <div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:3px">Deals Assessed</div>
-      </div>
-      <div style="width:1px;background:var(--border)"></div>
-      <div style="text-align:center">
-        <div class="fd" style="font-size:1.6rem;font-weight:800;color:var(--amber)" id="stat-today">—</div>
-        <div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:3px">Today</div>
-      </div>
-      <div style="width:1px;background:var(--border)"></div>
-      <div style="text-align:center">
-        <div class="fd" style="font-size:1.6rem;font-weight:800;color:var(--green)" id="stat-shares">—</div>
-        <div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.06em;text-transform:uppercase;margin-top:3px">LinkedIn Shares</div>
-      </div>
+    <div style="display:inline-flex;justify-content:center;gap:28px;flex-wrap:wrap;margin-bottom:28px;padding:16px 32px;background:var(--card);border-radius:14px;border:1.5px solid var(--border);box-shadow:0 4px 20px rgba(0,0,0,.2);margin-left:auto;margin-right:auto;display:block;max-width:220px;text-align:center">
+      <div class="fd" style="font-size:2rem;font-weight:800;color:var(--green)" id="stat-total">113</div>
+      <div style="font-size:.68rem;color:var(--sub);font-family:'DM Mono',monospace;letter-spacing:.08em;text-transform:uppercase;margin-top:4px">Deals Assessed</div>
     </div>
 
     <div class="glass" style="padding:28px;max-width:440px;margin:0 auto">
@@ -204,7 +192,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 </div>
 
 <script>
-const SHEETS_URL='https://script.google.com/macros/s/AKfycbxTDdunFZG5dipKpMRzUWN_MPPTkCqmDKoojyFsjfUBq8OkgdJsAvIIfyvGYENJy4H5/exec';
+const SHEETS_URL='YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
 const LOCK_MS=24*60*60*1000;
 
 let S={email:'',role:'ae',ans:{},conf:7};
@@ -223,39 +211,24 @@ function countdown(){const t=+localStorage.getItem('ic_locked')||0;const r=LOCK_
 function showLock(){document.getElementById('lock').style.display='flex';document.getElementById('lk-cd').textContent=countdown();}
 
 // ── Usage counter (fetched from Sheets via GET, falls back to localStorage) ──
-function loadStats(){
-  // localStorage fallback — always increment on results
-  const local={total:+localStorage.getItem('ic_stat_total')||0,today:+localStorage.getItem('ic_stat_today')||0,shares:+localStorage.getItem('ic_stat_shares')||0};
-  setStats(local.total||'—',local.today||'—',local.shares||'—');
+const STAT_BASE=113; // starting offset
 
-  // Try to fetch live stats from Sheets (GET endpoint returns JSON)
+function loadStats(){
+  const local=STAT_BASE+(+localStorage.getItem('ic_stat_total')||0);
+  document.getElementById('stat-total').textContent=local;
   if(!SHEETS_URL||SHEETS_URL.includes('YOUR_'))return;
   fetch(SHEETS_URL+'?action=stats')
     .then(r=>r.json())
-    .then(d=>{
-      if(d&&d.total!=null){setStats(d.total,d.today,d.shares);}
-    }).catch(()=>{});
+    .then(d=>{ if(d&&d.total!=null) document.getElementById('stat-total').textContent=(STAT_BASE+d.total).toLocaleString(); })
+    .catch(()=>{});
 }
 
-function setStats(total,today,shares){
-  const fmt=n=>typeof n==='number'?n.toLocaleString():n;
-  document.getElementById('stat-total').textContent=fmt(total);
-  document.getElementById('stat-today').textContent=fmt(today);
-  document.getElementById('stat-shares').textContent=fmt(shares);
-}
+function setStats(total){ document.getElementById('stat-total').textContent=(STAT_BASE+total).toLocaleString(); }
 
 function bumpLocalStats(isShare=false){
-  const today=new Date().toDateString();
-  const savedDay=localStorage.getItem('ic_stat_day');
-  let t=+localStorage.getItem('ic_stat_total')||0;
-  let d=savedDay===today?(+localStorage.getItem('ic_stat_today')||0):0;
-  let s=+localStorage.getItem('ic_stat_shares')||0;
-  t++;d++;
-  if(isShare)s++;
+  let t=+localStorage.getItem('ic_stat_total')||0; t++;
   localStorage.setItem('ic_stat_total',t);
-  localStorage.setItem('ic_stat_today',d);
-  localStorage.setItem('ic_stat_day',today);
-  localStorage.setItem('ic_stat_shares',s);
+  if(isShare){ let s=+localStorage.getItem('ic_stat_shares')||0; localStorage.setItem('ic_stat_shares',s+1); }
 }
 
 // ══════════════════════════════════════════════════════
@@ -852,6 +825,13 @@ function beginFlow(){
   if(!email||!email.includes('@')){document.getElementById('em').style.borderColor='var(--red)';return;}
   if(locked()){showLock();return;}
   S.email=email;
+  bumpLocalStats(false);
+  // Ping Sheets to increment server-side counter immediately
+  if(SHEETS_URL&&!SHEETS_URL.includes('YOUR_')){
+    fetch(SHEETS_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:'count',email:S.email,timestamp:new Date().toISOString()})
+    }).catch(()=>{});
+  }
   document.getElementById('s-hero').style.display='none';
   document.getElementById('s-q').style.display='block';
   phase='context';
@@ -1075,7 +1055,6 @@ function confHelp(v){
 // ══════════════════════════════════════════════════════
 function showResults(){
   lockIt();
-  bumpLocalStats(false); // count this assessment
   document.getElementById('hphase').style.display='none';
   document.getElementById('s-q').style.display='none';
   document.getElementById('s-res').style.display='block';
